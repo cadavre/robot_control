@@ -102,7 +102,7 @@ int main(void)
 			lcd_refresh();
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
-			USART_send_report();
+			// USART_send_report();
 		}
 		if (refresh_flag==255) {
 			refresh_flag = 0;
