@@ -8,12 +8,12 @@
 #ifndef ATMEGA_MASTER_CONF_H_
 #define ATMEGA_MASTER_CONF_H_
 
-// oznaczenia przycisków
-#define BTN_J1		0
-#define BTN_J2		1
-#define BTN_D3		2
-#define BTN_J4		3
-#define BTN_FUNCT	4
+// oznaczenia czujników
+#define SEN_L		0			// lewy
+#define SEN_C		1			// centrum
+#define SEN_R		2			// prawy
+#define SEN_LL		3			// lewy brzegowy
+#define SEN_RR		4			// prawy brzegowy
 
 // stany przycisków
 #define BTN_OFF		0x00		// nic nie wciœniête
