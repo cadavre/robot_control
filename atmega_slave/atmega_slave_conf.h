@@ -9,7 +9,7 @@
 #define ATMEGA_SLAVE_CONF_H_
 
 // porty SPI
-#define MISO		(1<<PB4)
+#define MISO					(1<<PB4)
 
 // krokowe: porty
 #define MOTOR_PD				(1<<PD4)|(1<<PD5)|(1<<PD6)|(1<<PD7)
@@ -56,13 +56,13 @@
 
 // krokowe: ograniczenie prêdkoœci
 #define M0_SPD_L				0
-#define M0_SPD_H				155
+#define M0_SPD_H				220
 #define M1_SPD_L				0
-#define M1_SPD_H				155
+#define M1_SPD_H				220
 
 // krokowe: ratio prze³o¿eñ na jednostkê
-#define M0_RATIO				0.1
-#define M1_RATIO				100
+#define M0_RATIO				1
+#define M1_RATIO				1
 
 // krokowe: ograniczenie pozycji
 #define M0_POS_MIN				0
@@ -70,12 +70,12 @@
 #define M1_POS_MIN				1
 #define M1_POS_MAX				40000
 
-// oznaczenia przycisków
-#define BTN_J1		0
-#define BTN_J2		1
-#define BTN_D3		2
-#define BTN_J4		3
-#define BTN_FUNCT	4
+// oznaczenia czujników
+#define SEN_L		(1<<PC0)	// lewy
+#define SEN_C		(1<<PC1)	// centrum
+#define SEN_R		(1<<PC2)	// prawy
+#define SEN_LL		(1<<PC3)	// lewy brzegowy
+#define SEN_RR		(1<<PC4)	// prawy brzegowy
 
 // stany przycisków
 #define BTN_OFF		0x00		// nic nie wciœniête

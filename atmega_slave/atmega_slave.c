@@ -70,7 +70,7 @@ void SPI_init(void) {
  * Initialize Timer0 for switching steps on stepping motors
  */
 void Timer0_init(void) {
-	TCCR0 |= (1<<CS00);							// no prescaler
+	TCCR0 |= (1<<CS01);							// no prescaler
 	TIMSK |= (1<<TOIE0);						// overflow IRQ
 }
 
@@ -117,6 +117,8 @@ ISR(TIMER0_OVF_vect) {
 			//motor_move(1,1);
 		}
 	}
+
+	btn_get_flag++;
 }
 
 /*

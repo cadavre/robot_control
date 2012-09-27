@@ -3,33 +3,33 @@ atmega_slave.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000378  00000000  00000000  00000094  2**1
+  0 .text         00000382  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000006  00800060  00000378  0000040c  2**0
+  1 .data         00000006  00800060  00000382  00000416  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000013  00800066  00800066  00000412  2**0
+  2 .bss          00000013  00800066  00800066  0000041c  2**0
                   ALLOC
-  3 .stab         000006cc  00000000  00000000  00000414  2**2
+  3 .stab         000006cc  00000000  00000000  0000041c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000085  00000000  00000000  00000ae0  2**0
+  4 .stabstr      00000085  00000000  00000000  00000ae8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_aranges 00000020  00000000  00000000  00000b65  2**0
+  5 .debug_aranges 00000020  00000000  00000000  00000b6d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_pubnames 00000135  00000000  00000000  00000b85  2**0
+  6 .debug_pubnames 00000135  00000000  00000000  00000b8d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00000321  00000000  00000000  00000cba  2**0
+  7 .debug_info   00000321  00000000  00000000  00000cc2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00000113  00000000  00000000  00000fdb  2**0
+  8 .debug_abbrev 00000113  00000000  00000000  00000fe3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00000404  00000000  00000000  000010ee  2**0
+  9 .debug_line   0000040c  00000000  00000000  000010f6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000000b0  00000000  00000000  000014f4  2**2
+ 10 .debug_frame  000000b0  00000000  00000000  00001504  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000184  00000000  00000000  000015a4  2**0
+ 11 .debug_str    00000184  00000000  00000000  000015b4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00000078  00000000  00000000  00001728  2**0
+ 12 .debug_loc    00000078  00000000  00000000  00001738  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_pubtypes 0000002b  00000000  00000000  000017a0  2**0
+ 13 .debug_pubtypes 0000002b  00000000  00000000  000017b0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,7 +67,7 @@ Disassembly of section .text:
   32:	10 e0       	ldi	r17, 0x00	; 0
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	e8 e7       	ldi	r30, 0x78	; 120
+  38:	e2 e8       	ldi	r30, 0x82	; 130
   3a:	f3 e0       	ldi	r31, 0x03	; 3
   3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
   3e:	05 90       	lpm	r0, Z+
@@ -90,7 +90,7 @@ Disassembly of section .text:
   54:	b1 07       	cpc	r27, r17
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	6e d0       	rcall	.+220    	; 0x136 <main>
-  5a:	8c c1       	rjmp	.+792    	; 0x374 <_exit>
+  5a:	91 c1       	rjmp	.+802    	; 0x37e <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
@@ -180,9 +180,9 @@ void SPI_init(void) {
  * Initialize Timer0 for switching steps on stepping motors
  */
 void Timer0_init(void) {
-	TCCR0 |= (1<<CS00);							// no prescaler
+	TCCR0 |= (1<<CS01);							// no prescaler
   ae:	83 b7       	in	r24, 0x33	; 51
-  b0:	81 60       	ori	r24, 0x01	; 1
+  b0:	82 60       	ori	r24, 0x02	; 2
   b2:	83 bf       	out	0x33, r24	; 51
 	TIMSK |= (1<<TOIE0);						// overflow IRQ
   b4:	89 b7       	in	r24, 0x39	; 57
@@ -291,7 +291,7 @@ int main(void)
 			}
 			if (set_speed > M1_SPD_H) {
 				motor_speed[1] = M1_SPD_H;
- 140:	8b e9       	ldi	r24, 0x9B	; 155
+ 140:	8c ed       	ldi	r24, 0xDC	; 220
 	SPI_init();
 	ADC_init();
 	sei();
@@ -312,7 +312,7 @@ int main(void)
 			// set motors speed
 			if (set_speed > M0_SPD_H) {
  14c:	90 91 66 00 	lds	r25, 0x0066
- 150:	9c 39       	cpi	r25, 0x9C	; 156
+ 150:	9d 3d       	cpi	r25, 0xDD	; 221
  152:	18 f0       	brcs	.+6      	; 0x15a <main+0x24>
 				motor_speed[0] = M0_SPD_H;
  154:	80 93 67 00 	sts	0x0067, r24
@@ -327,7 +327,7 @@ int main(void)
 			}
 			if (set_speed > M1_SPD_H) {
  166:	90 91 66 00 	lds	r25, 0x0066
- 16a:	9c 39       	cpi	r25, 0x9C	; 156
+ 16a:	9d 3d       	cpi	r25, 0xDD	; 221
  16c:	18 f0       	brcs	.+6      	; 0x174 <main+0x3e>
 				motor_speed[1] = M1_SPD_H;
  16e:	80 93 68 00 	sts	0x0068, r24
@@ -658,27 +658,32 @@ ISR(TIMER0_OVF_vect) {
 			//motor_move(1,1);
 		}
 	}
+
+	btn_get_flag++;
+ 352:	80 91 76 00 	lds	r24, 0x0076
+ 356:	8f 5f       	subi	r24, 0xFF	; 255
+ 358:	80 93 76 00 	sts	0x0076, r24
 }
- 352:	ff 91       	pop	r31
- 354:	ef 91       	pop	r30
- 356:	bf 91       	pop	r27
- 358:	af 91       	pop	r26
- 35a:	9f 91       	pop	r25
- 35c:	8f 91       	pop	r24
- 35e:	7f 91       	pop	r23
- 360:	6f 91       	pop	r22
- 362:	5f 91       	pop	r21
- 364:	4f 91       	pop	r20
- 366:	3f 91       	pop	r19
- 368:	2f 91       	pop	r18
- 36a:	0f 90       	pop	r0
- 36c:	0f be       	out	0x3f, r0	; 63
- 36e:	0f 90       	pop	r0
- 370:	1f 90       	pop	r1
- 372:	18 95       	reti
+ 35c:	ff 91       	pop	r31
+ 35e:	ef 91       	pop	r30
+ 360:	bf 91       	pop	r27
+ 362:	af 91       	pop	r26
+ 364:	9f 91       	pop	r25
+ 366:	8f 91       	pop	r24
+ 368:	7f 91       	pop	r23
+ 36a:	6f 91       	pop	r22
+ 36c:	5f 91       	pop	r21
+ 36e:	4f 91       	pop	r20
+ 370:	3f 91       	pop	r19
+ 372:	2f 91       	pop	r18
+ 374:	0f 90       	pop	r0
+ 376:	0f be       	out	0x3f, r0	; 63
+ 378:	0f 90       	pop	r0
+ 37a:	1f 90       	pop	r1
+ 37c:	18 95       	reti
 
-00000374 <_exit>:
- 374:	f8 94       	cli
+0000037e <_exit>:
+ 37e:	f8 94       	cli
 
-00000376 <__stop_program>:
- 376:	ff cf       	rjmp	.-2      	; 0x376 <__stop_program>
+00000380 <__stop_program>:
+ 380:	ff cf       	rjmp	.-2      	; 0x380 <__stop_program>

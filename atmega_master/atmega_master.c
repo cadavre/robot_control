@@ -14,8 +14,9 @@
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
 volatile uint8_t drive_state[6] = {0,0,0,0,0,0};
 
-uint8_t deg_sign[] = {6,9,9,6,0,0,0,0}; // degree sign definition for LCD
-volatile char btn_sign;
+volatile uint16_t iteration = 0;				// iteration number - one round is 8 (90deg=2, 45deg=1)
+volatile uint16_t dimensions[2] = {0,0};		// cm
+volatile uint16_t total_dist = 0;				// cm - max 650m
 
 volatile uint8_t refresh_flag = 0;
 volatile uint8_t j = 0;
@@ -35,6 +36,22 @@ void Timer2_init(void) {
 	TCCR2 |= (1<<CS21)|(1<<CS22);				// prescaler 256
 	OCR2 = 0x24;								// 0x24 = 36 = ~1.15ms
 	TIMSK |= (1<<OCIE2);						// compare match IRQ
+}
+
+/*
+ * Initialization of input ports for sensors
+ */
+void sensors_init(void) {
+	DDRC &= ~(SEN_L|SEN_C|SEN_R|SEN_LL|SEN_RR);
+	PORTC |= SEN_L|SEN_C|SEN_R|SEN_LL|SEN_RR;
+}
+
+/*
+ * Initialization of input ports for control buttons
+ */
+void controls_init(void) {
+	DDRB &= ~(BTN_START|BTN_RESET);
+	PORTB |= BTN_START|BTN_RESET;
 }
 
 /*
@@ -88,21 +105,48 @@ ISR(TIMER2_COMP_vect) {
 /************************************************* MAIN *************************************************/
 int main(void)
 {
+	controls_init();
+	sensors_init();
 	Timer2_init();
 	SPI_init();
 	USART_init(__UBRR);
 	OSCCAL = 152; // oscilator calibration for USART communication
 	sei();
 	lcd_init();
-	lcd_defchar(0x80, deg_sign);
 	while(1)
 	{
-		// TODO obs³uga klawiszy i przypisanie ich do rejestru stanu przycisków
+		if (!(PINC&SEN_C)) {
+			btn_state[0] = BTN_ON;
+		} else if (!(PINC&SEN_L)) {
+			btn_state[1] = BTN_ON;
+		} else if (!(PINC&SEN_R)) {
+			// no sensor
+			btn_state[2] = 0;
+		} else if (!(PINC&SEN_LL)) {
+			// no sensor
+			btn_state[3] = 0;
+		} else if (!(PINC&SEN_RR)) {
+			// no sensor
+			btn_state[4] = 0;
+		} else {
+			for( int k=0; k<5; k++ ) {
+				btn_state[k] = BTN_OFF;
+			}
+		}
+
+		if (!(PINB&BTN_START)) {
+			btn_state[5] = BTN_L;
+		} else if (!(PINB&BTN_RESET)) {
+			btn_state[5] = BTN_R;
+		} else {
+			btn_state[5] = BTN_OFF;
+		}
+
 		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
 			lcd_refresh();
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
-			// USART_send_report();
+			USART_send_report();
 		}
 		if (refresh_flag==255) {
 			refresh_flag = 0;
@@ -113,64 +157,68 @@ int main(void)
 /********************************************** END OF MAIN **********************************************/
 
 /*
+ * Show welcome message on boot
+ */
+void lcd_welcome(void) {
+	lcd_cls();
+	lcd_locate(0,2);
+	lcd_str("Mechatronika");
+	lcd_locate(1,3);
+	lcd_str("AiR, gr.IV");
+}
+
+/*
  * Refresh LCD display
  */
 void lcd_refresh(void) {
 	lcd_cls();
 
-	// J1
+	// SENSor
 	lcd_locate(0,0);
-	lcd_str("1:");
-	lcd_locate(0,2);
-	lcd_int(drive_state[0]);
-	lcd_locate(0,5);
-	lcd_str("\x80");
-	// J2
+	lcd_str("SENS");
+	lcd_locate(0,4);
+	if (btn_state[0] == BTN_ON) {
+		lcd_str("C");
+	} else if (btn_state[1] == BTN_ON) {
+		lcd_str("L");
+	} else {
+		lcd_str(" ");
+	}
+
+	// MODE
 	lcd_locate(0,6);
-	lcd_str("2:");
-	lcd_locate(0,8);
-	lcd_int(drive_state[1]);
-	lcd_locate(0,11);
-	lcd_str("\x80");
-	// D3
+	lcd_str("MODE");
+	lcd_locate(0,10);
+	lcd_int(9); // todo
+	// ITeration
 	lcd_locate(1,0);
-	lcd_str("3:");
+	lcd_str("IT");
 	lcd_locate(1,2);
-	lcd_int(drive_state[2]);
-	// J4
+	lcd_int(iteration); // number of iteration
+	// DiSTance
 	lcd_locate(1,6);
-	lcd_str("4:");
+	lcd_str("LN");
 	lcd_locate(1,8);
-	lcd_int(drive_state[3]);
-	lcd_locate(1,11);
-	lcd_str("\x80");
-
-	lcd_locate(0,12);
+	lcd_int(total_dist/100); // total distance in meters
+	// SPD
+	lcd_locate(0,13);
 	lcd_str("SPD");
-	lcd_locate(1,12);
-	lcd_int(drive_state[5]);
-	lcd_locate(1,15);
-	lcd_char('%');
-
-	/*
-	lcd_locate(0,0);
-	btn_sign = (btn_state[0]==BTN_L)  ? '-'  : ( (btn_state[0]==BTN_R) ? '+' : ' ' ) ;
-	lcd_char(btn_sign);
+	lcd_locate(1,13);
+	lcd_int(drive_state[5]); // 8bit value
+	// separators
 	lcd_locate(0,5);
-	btn_sign = (btn_state[1]==BTN_L)  ? '-'  : ( (btn_state[1]==BTN_R) ? '+' : ' ' ) ;
-	lcd_char(btn_sign);
-	lcd_locate(1,0);
-	btn_sign = (btn_state[2]==BTN_L)  ? '-'  : ( (btn_state[2]==BTN_R) ? '+' : ' ' ) ;
-	lcd_char(btn_sign);
+	lcd_str("|");
+	lcd_locate(0,11);
+	lcd_str("|");
 	lcd_locate(1,5);
-	btn_sign = (btn_state[3]==BTN_L)  ? '-'  : ( (btn_state[3]==BTN_R) ? '+' : ' ' ) ;
-	lcd_char(btn_sign);
-
-	lcd_locate(0,15);
-	lcd_int(btn_state[4]);
-	lcd_locate(1,15);
-	lcd_int(btn_state[5]);
-	*/
+	lcd_str("|");
+	lcd_locate(1,11);
+	lcd_str("|");
+	// two empty fields
+	lcd_locate(0,12);
+	lcd_str("|");
+	lcd_locate(1,12);
+	lcd_str("|");
 }
 
 /*
@@ -178,14 +226,4 @@ void lcd_refresh(void) {
  */
 void USART_send_report(void) {
 	USART_string("\r\n#### Report ####");
-	USART_string("\r\nDrive J1: ");
-	USART_int(drive_state[0]);
-	USART_string("\r\nDrive J2: ");
-	USART_int(drive_state[1]);
-	USART_string("\r\nDrive D3: ");
-	USART_int(drive_state[2]);
-	USART_string("\r\nDrive J4: ");
-	USART_int(drive_state[3]);
-	USART_string("\r\nSpeed: ");
-	USART_int(drive_state[5]);
 }

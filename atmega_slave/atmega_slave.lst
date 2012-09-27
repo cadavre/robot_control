@@ -102,7 +102,7 @@
  116               	.L__stack_usage = 0
  117               	.LM21:
  118 0050 83B7      		in r24,83-32
- 119 0052 8160      		ori r24,lo8(1)
+ 119 0052 8260      		ori r24,lo8(2)
  120 0054 83BF      		out 83-32,r24
  121               	.LM22:
  122 0056 89B7      		in r24,89-32
@@ -212,12 +212,12 @@
  232 00de 00D0      		rcall ADC_init
  233               	.LM39:
  234               	/* #APP */
- 235               	 ;  139 "atmega_slave.c" 1
+ 235               	 ;  141 "atmega_slave.c" 1
  236 00e0 7894      		sei
  237               	 ;  0 "" 2
  238               	.LM40:
  239               	/* #NOAPP */
- 240 00e2 8BE9      		ldi r24,lo8(-101)
+ 240 00e2 8CED      		ldi r24,lo8(-36)
  241               	.L18:
  242               	.LM41:
  243 00e4 9091 0000 		lds r25,btn_get_flag
@@ -227,7 +227,7 @@
  247 00ec 369A      		sbi 38-32,6
  248               	.LM43:
  249 00ee 9091 0000 		lds r25,set_speed
- 250 00f2 9C39      		cpi r25,lo8(-100)
+ 250 00f2 9D3D      		cpi r25,lo8(-35)
  251 00f4 00F0      		brlo .L11
  252               	.LM44:
  253 00f6 8093 0000 		sts motor_speed,r24
@@ -241,7 +241,7 @@
  261               	.L12:
  262               	.LM47:
  263 0108 9091 0000 		lds r25,set_speed
- 264 010c 9C39      		cpi r25,lo8(-100)
+ 264 010c 9D3D      		cpi r25,lo8(-35)
  265 010e 00F0      		brlo .L13
  266               	.LM48:
  267 0110 8093 0000 		sts motor_speed+1,r24
@@ -565,100 +565,104 @@
  591               	.LM101:
  592 02e6 8091 0000 		lds r24,stepper_flag+1
  593 02ea 8823      		tst r24
- 594 02ec 01F4      		brne .L46
+ 594 02ec 01F4      		brne .L51
  595               	.LM102:
  596 02ee 81E0      		ldi r24,lo8(1)
  597 02f0 60E0      		ldi r22,lo8(0)
  598 02f2 00D0      		rcall motor_move
- 599               	.L46:
- 600               	/* epilogue start */
- 601               	.LM103:
- 602 02f4 FF91      		pop r31
- 603 02f6 EF91      		pop r30
- 604 02f8 BF91      		pop r27
- 605 02fa AF91      		pop r26
- 606 02fc 9F91      		pop r25
- 607 02fe 8F91      		pop r24
- 608 0300 7F91      		pop r23
- 609 0302 6F91      		pop r22
- 610 0304 5F91      		pop r21
- 611 0306 4F91      		pop r20
- 612 0308 3F91      		pop r19
- 613 030a 2F91      		pop r18
- 614 030c 0F90      		pop r0
- 615 030e 0FBE      		out __SREG__,r0
- 616 0310 0F90      		pop r0
- 617 0312 1F90      		pop __zero_reg__
- 618 0314 1895      		reti
- 619               	.LFE5:
- 621               	.global	motor_current_step
- 622               		.data
- 625               	motor_current_step:
- 626 0000 01        		.byte	1
- 627 0001 01        		.byte	1
- 628               	.global	motor_pos
- 631               	motor_pos:
- 632 0002 0000      		.word	0
- 633 0004 0500      		.word	5
- 634               	.global	set_speed
- 635               	.global	set_speed
- 636               		.section .bss
- 639               	set_speed:
- 640 0000 00        		.skip 1,0
- 641               	.global	motor_speed
- 642               	.global	motor_speed
- 645               	motor_speed:
- 646 0001 0000      		.skip 2,0
- 647               	.global	drive_state
- 648               	.global	drive_state
- 651               	drive_state:
- 652 0003 0000 0000 		.skip 6,0
- 652      0000 
- 653               	.global	btn_state
- 654               	.global	btn_state
- 657               	btn_state:
- 658 0009 0000 0000 		.skip 6,0
- 658      0000 
- 659               	.global	j
- 660               	.global	j
- 663               	j:
- 664 000f 00        		.skip 1,0
- 665               	.global	btn_get_flag
- 666               	.global	btn_get_flag
- 669               	btn_get_flag:
- 670 0010 00        		.skip 1,0
- 671               	.global	stepper_flag
- 672               	.global	stepper_flag
- 675               	stepper_flag:
- 676 0011 0000      		.skip 2,0
- 773               	.Letext0:
+ 599               	.L51:
+ 600               	.LM103:
+ 601 02f4 8091 0000 		lds r24,btn_get_flag
+ 602 02f8 8F5F      		subi r24,lo8(-(1))
+ 603 02fa 8093 0000 		sts btn_get_flag,r24
+ 604               	/* epilogue start */
+ 605               	.LM104:
+ 606 02fe FF91      		pop r31
+ 607 0300 EF91      		pop r30
+ 608 0302 BF91      		pop r27
+ 609 0304 AF91      		pop r26
+ 610 0306 9F91      		pop r25
+ 611 0308 8F91      		pop r24
+ 612 030a 7F91      		pop r23
+ 613 030c 6F91      		pop r22
+ 614 030e 5F91      		pop r21
+ 615 0310 4F91      		pop r20
+ 616 0312 3F91      		pop r19
+ 617 0314 2F91      		pop r18
+ 618 0316 0F90      		pop r0
+ 619 0318 0FBE      		out __SREG__,r0
+ 620 031a 0F90      		pop r0
+ 621 031c 1F90      		pop __zero_reg__
+ 622 031e 1895      		reti
+ 623               	.LFE5:
+ 625               	.global	motor_current_step
+ 626               		.data
+ 629               	motor_current_step:
+ 630 0000 01        		.byte	1
+ 631 0001 01        		.byte	1
+ 632               	.global	motor_pos
+ 635               	motor_pos:
+ 636 0002 0000      		.word	0
+ 637 0004 0500      		.word	5
+ 638               	.global	set_speed
+ 639               	.global	set_speed
+ 640               		.section .bss
+ 643               	set_speed:
+ 644 0000 00        		.skip 1,0
+ 645               	.global	motor_speed
+ 646               	.global	motor_speed
+ 649               	motor_speed:
+ 650 0001 0000      		.skip 2,0
+ 651               	.global	drive_state
+ 652               	.global	drive_state
+ 655               	drive_state:
+ 656 0003 0000 0000 		.skip 6,0
+ 656      0000 
+ 657               	.global	btn_state
+ 658               	.global	btn_state
+ 661               	btn_state:
+ 662 0009 0000 0000 		.skip 6,0
+ 662      0000 
+ 663               	.global	j
+ 664               	.global	j
+ 667               	j:
+ 668 000f 00        		.skip 1,0
+ 669               	.global	btn_get_flag
+ 670               	.global	btn_get_flag
+ 673               	btn_get_flag:
+ 674 0010 00        		.skip 1,0
+ 675               	.global	stepper_flag
+ 676               	.global	stepper_flag
+ 679               	stepper_flag:
+ 680 0011 0000      		.skip 2,0
+ 777               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 atmega_slave.c
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:2      *ABS*:0000003f __SREG__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:3      *ABS*:0000003e __SP_H__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:4      *ABS*:0000003d __SP_L__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:5      *ABS*:00000034 __CCP__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:18     .text:00000000 motor_ports_init
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:62     .text:00000032 ADC_init
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:90     .text:00000046 SPI_init
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:110    .text:00000050 Timer0_init
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:132    .text:0000005e __vector_10
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:663    .bss:0000000f j
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:657    .bss:00000009 btn_state
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:651    .bss:00000003 drive_state
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:188    .text:000000b2 __vector_14
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:639    .bss:00000000 set_speed
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:218    .text:000000d8 main
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:669    .bss:00000010 btn_get_flag
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:645    .bss:00000001 motor_speed
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:283    .text:00000128 motor_make_step
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:625    .data:00000000 motor_current_step
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:406    .text:000001be motor_move
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:631    .data:00000002 motor_pos
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:525    .text:00000270 __vector_9
-C:\Users\cadavre\AppData\Local\Temp\ccU4MLxc.s:675    .bss:00000011 stepper_flag
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:2      *ABS*:0000003f __SREG__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:3      *ABS*:0000003e __SP_H__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:4      *ABS*:0000003d __SP_L__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:5      *ABS*:00000034 __CCP__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:18     .text:00000000 motor_ports_init
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:62     .text:00000032 ADC_init
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:90     .text:00000046 SPI_init
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:110    .text:00000050 Timer0_init
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:132    .text:0000005e __vector_10
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:667    .bss:0000000f j
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:661    .bss:00000009 btn_state
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:655    .bss:00000003 drive_state
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:188    .text:000000b2 __vector_14
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:643    .bss:00000000 set_speed
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:218    .text:000000d8 main
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:673    .bss:00000010 btn_get_flag
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:649    .bss:00000001 motor_speed
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:283    .text:00000128 motor_make_step
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:629    .data:00000000 motor_current_step
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:406    .text:000001be motor_move
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:635    .data:00000002 motor_pos
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:525    .text:00000270 __vector_9
+C:\Users\cadavre\AppData\Local\Temp\ccBoOKsO.s:679    .bss:00000011 stepper_flag
 
 UNDEFINED SYMBOLS
 __do_copy_data
