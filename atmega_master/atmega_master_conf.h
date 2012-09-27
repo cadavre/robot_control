@@ -38,7 +38,9 @@
 
 // porty LCD skonfigurowane w lcd/lcd44780.h
 
-// dane dotycz¹ce odkurzania
-#define VACUM_WIDTH				20		// szerokoœæ odkurzania [cm]
+// definicje stanów flag
+#define STATE_IDLE				0x00
+#define STATE_RUNNING			0x01
+#define STATE_RESETTING			0x02
 
 #endif /* ATMEGA_MASTER_CONF_H_ */

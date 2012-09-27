@@ -12,20 +12,25 @@
 #include "usart/usart.h"
 
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
-volatile uint8_t drive_state[6] = {0,0,0,0,0,0};
+volatile uint8_t memory_state[6] = {0,0,0,0,0,0};
 
 volatile uint16_t iteration = 0;				// iteration number - one round is 8 (90deg=2, 45deg=1)
-volatile uint16_t dimensions[2] = {0,0};		// cm
-volatile uint16_t total_dist = 0;				// cm - max 650m
+volatile uint8_t dimensions[2] = {0,0};			// dm, max 25.5m
+volatile uint8_t total_dist = 0;				// m, max 255m
+
+uint8_t separator_sign[] = {4,4,4,4,4,4,4,4};			// separator sign for lcd
 
 volatile uint8_t refresh_flag = 0;
 volatile uint8_t j = 0;
+
+volatile uint8_t current_state = STATE_IDLE;
 
 /*
  * Prototypes
  */
 void lcd_drive(int value, char *str);
 void lcd_refresh(void);
+void lcd_welcome(void);
 void USART_send_report(void);
 
 /*
@@ -92,7 +97,7 @@ uint8_t SPI_transfer(uint8_t byte) {
  */
 ISR(TIMER2_COMP_vect) {
 	SPI_SS_low();
-	drive_state[j] = SPI_transfer(btn_state[j]);
+	memory_state[j] = SPI_transfer(btn_state[j]);
 	SPI_SS_high();
 	if(j<5) { // send 6 bytes
 		j++;
@@ -113,8 +118,18 @@ int main(void)
 	OSCCAL = 152; // oscilator calibration for USART communication
 	sei();
 	lcd_init();
+	lcd_defchar(0x80, separator_sign);
+	lcd_welcome();
 	while(1)
 	{
+		if (!(PINB&BTN_START)) {
+			btn_state[5] = BTN_L;
+		} else if (!(PINB&BTN_RESET)) {
+			btn_state[5] = BTN_R;
+		} else {
+			btn_state[5] = BTN_OFF;
+		}
+
 		if (!(PINC&SEN_C)) {
 			btn_state[0] = BTN_ON;
 		} else if (!(PINC&SEN_L)) {
@@ -134,16 +149,8 @@ int main(void)
 			}
 		}
 
-		if (!(PINB&BTN_START)) {
-			btn_state[5] = BTN_L;
-		} else if (!(PINB&BTN_RESET)) {
-			btn_state[5] = BTN_R;
-		} else {
-			btn_state[5] = BTN_OFF;
-		}
-
 		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
-			lcd_refresh();
+			// lcd_refresh(); // todo dodaæ if sprawdzaj¹cy czy jest w trybie odkurzania
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
 			USART_send_report();
@@ -189,7 +196,7 @@ void lcd_refresh(void) {
 	lcd_locate(0,6);
 	lcd_str("MODE");
 	lcd_locate(0,10);
-	lcd_int(9); // todo
+	lcd_str(" "); // todo
 	// ITeration
 	lcd_locate(1,0);
 	lcd_str("IT");
@@ -204,21 +211,21 @@ void lcd_refresh(void) {
 	lcd_locate(0,13);
 	lcd_str("SPD");
 	lcd_locate(1,13);
-	lcd_int(drive_state[5]); // 8bit value
+	lcd_int(memory_state[5]); // 8bit value
 	// separators
 	lcd_locate(0,5);
-	lcd_str("|");
+	lcd_str("\x80");
 	lcd_locate(0,11);
-	lcd_str("|");
+	lcd_str("\x80");
 	lcd_locate(1,5);
-	lcd_str("|");
+	lcd_str("\x80");
 	lcd_locate(1,11);
-	lcd_str("|");
+	lcd_str("\x80");
 	// two empty fields
 	lcd_locate(0,12);
-	lcd_str("|");
+	lcd_str(" ");
 	lcd_locate(1,12);
-	lcd_str("|");
+	lcd_str(" ");
 }
 
 /*

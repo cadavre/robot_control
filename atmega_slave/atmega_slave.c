@@ -20,12 +20,19 @@ volatile uint8_t motor_speed[2] = {0,0};
 /*
  * Variables for SPI
  */
-volatile uint8_t drive_state[6] = {0,0,0,0,0,0};
+volatile uint8_t memory_state[6] = {0,0,0,0,0,0};
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
+
+volatile uint16_t iteration = 0;				// iteration number - one round is 8 (90deg=2, 45deg=1)
+volatile uint8_t dimensions[2] = {0,0};			// dm, max 25.5m
+volatile uint8_t total_dist = 0;				// m, max 255m
 
 volatile uint8_t j = 0;
 volatile uint8_t btn_get_flag = 0;
-volatile uint8_t stepper_flag[2] = {0,0};
+volatile uint8_t stepper_flag = 0;
+
+volatile uint8_t current_state = STATE_IDLE;
+volatile uint8_t current_mode = MODE_PROGRESSING;
 
 /*
  * Prototypes
@@ -85,36 +92,36 @@ ISR(SPI_STC_vect) {
 	} else {
 		j = 0;
 	}
-	SPDR = drive_state[j];
+	SPDR = memory_state[j];
 }
 
 /*
  * Timer0 interrupt handler
  */
 ISR(TIMER0_OVF_vect) {
-	if (stepper_flag[0] > (255 - motor_speed[0])) {
-		stepper_flag[0] = 0;
+	if (stepper_flag > (255 - motor_speed[0])) {
+		stepper_flag = 0;
 	} else {
-		stepper_flag[0]++;
-	}
-	if (stepper_flag[1] > (255 - motor_speed[1])) {
-		stepper_flag[1] = 0;
-	} else {
-		stepper_flag[1]++;
+		stepper_flag++;
 	}
 
-	if (stepper_flag[0] == 0) {
-		if (1 || btn_state[0]==BTN_L) {
+	if (stepper_flag == 0) {
+		motor_move(0,0); // temp for test
+		motor_move(1,0); // temp for test
+		if (current_mode == MODE_PROGRESSING) {
+			// both same speed forward
 			//motor_move(0,0);
-		} else if (btn_state[0]==BTN_R) {
+			//motor_move(1,0);
+		} else if (current_mode == MODE_REVERSING) {
+			// both same speed reverse
 			//motor_move(0,1);
-		}
-	}
-	if (stepper_flag[1] == 0) {
-		if (1 || btn_state[3]==BTN_L) {
-			motor_move(1,0);
-		} else if (btn_state[3]==BTN_R) {
 			//motor_move(1,1);
+		} else if (current_mode == MODE_BACK90_TURNING) {
+			// turning 90deg to back
+			//motor_move(0,1);
+		} else if (current_mode == MODE_BACK45_TURNING) {
+			// turning 45deg to back
+			//motor_move(0,1);
 		}
 	}
 
@@ -128,7 +135,7 @@ ISR(TIMER0_OVF_vect) {
  */
 ISR(ADC_vect) {
 	// 0 - 255
-	set_speed = drive_state[5] = ADCH;
+	set_speed = memory_state[5] = ADCH;
 }
 
 /************************************************* MAIN *************************************************/
@@ -141,13 +148,41 @@ int main(void)
 	sei();
 	while(1)
 	{
-		if (btn_get_flag==BTN_GET_ON) {
+		if (current_state == STATE_RUNNING) {
+			/*
+			 * 1. course = iteration/8		[floor]
+			 *	  (course > 1) { reverse o course*VACUM_WIDTH }
+			 * 2. (œrodek) { odwróæ o 90deg }
+			 *    (lewy) { odwróc o 45deg }
+			 * 3. jedŸ
+			 */
+			if (btn_state[0] == BTN_ON) {
+				// jeb³ œrodek
+				btn_state[0] = BTN_OFF;
+			} else if (btn_state[1] == BTN_ON) {
+				// jeb³ lewy
+				btn_state[1] = BTN_OFF;
+			}
+		}
 
-			// refresh current drives positions
-			//drive_state[0] = motor_pos[0] * M0_RATIO;
-			//drive_state[1] = (servo_pos_raw[1] - SERVO_MIN+50) / SERVO_STEPS_PER_DEG;		// +50 dla wyrównania 0 stopni
-			//drive_state[2] = motor_pos[1] / M1_RATIO;																					// TEMP: dzielenie zamiast mno¿enia!
-			//drive_state[3] = (servo_pos_raw[2] - SERVO_MIN+50) / SERVO_STEPS_PER_DEG;
+		if (btn_get_flag == BTN_GET_ON) {
+
+			if (btn_state[5] == BTN_L && current_state == STATE_IDLE) {
+				// wciœniêto start podczas gdy w idle
+				current_state = STATE_RUNNING;
+				btn_state[5] = BTN_OFF;
+			} else if (btn_state[5] == BTN_R && current_state == STATE_RUNNING) {
+				// wciœniêto reset podczas gdy odkurza³
+				current_state = STATE_RESETTING;
+				btn_state[5] = BTN_OFF;
+			}
+
+			// refresh current memory
+			//memory_state[0] = mode;
+			memory_state[1] = total_dist;
+			//memory_state[2] = ;
+			//memory_state[3] = ;
+			//memory_state[4] = ;
 
 			// measure value for speed
 			ADCSRA |= (1<<ADSC);
