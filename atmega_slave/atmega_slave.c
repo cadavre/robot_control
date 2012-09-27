@@ -9,16 +9,6 @@
 #include <avr/io.h>
 #include "atmega_slave_conf.h"
 
-#if USING_SOFTSTART == 1
-/*
- * Variables for softstart
- */
-volatile uint8_t ss_s_step[4] = {0,0,0,0};			// max 255 zmian prêdkoœci
-volatile uint8_t ss_s_done[4] = {0,0,0,0};			// czy wykonano softstart danego napêdu
-volatile uint8_t ss_m_step[2] = {0,0};
-volatile uint8_t ss_m_done[2] = {0,0};
-#endif
-
 /*
  * Variables for servo controls
  */
@@ -183,8 +173,6 @@ ISR(TIMER1_COMPA_vect) {
  * Timer0 interrupt handler
  */
 ISR(TIMER0_OVF_vect) {
-	#if USING_SOFTSTART == 1
-	#else
 	if (stepper_flag[0] > (255 - motor_speed[0])) {
 		stepper_flag[0] = 0;
 	} else {
@@ -195,7 +183,6 @@ ISR(TIMER0_OVF_vect) {
 	} else {
 		stepper_flag[1]++;
 	}
-	#endif
 
 	if (stepper_flag[0] == 0) {
 		if (btn_state[0]==BTN_L) {
@@ -204,7 +191,6 @@ ISR(TIMER0_OVF_vect) {
 			motor_move(0,1);
 		}
 	}
-	//TODO sprawdzenie ograniczenia
 	if (stepper_flag[1] == 0) {
 		if (btn_state[3]==BTN_L) {
 			if (motor_pos[1]>M1_POS_MIN) {
@@ -251,14 +237,6 @@ int main(void)
 				servo_move(0,1);
 				servo_move(1,0);
 			}
-			#if USING_SOFTSTART == 1
-			else {
-				ss_s_done[0] = 0;			// zerujemy flagê softstartu po puszczeniu przycisku
-				ss_s_done[1] = 0;
-				ss_s_step[0] = 0
-				ss_s_step[1] = 0
-			}
-			#endif
 			if (btn_state[2]==BTN_L) {
 				servo_move(2,0);
 				servo_move(3,0);
@@ -266,12 +244,6 @@ int main(void)
 				servo_move(2,1);
 				servo_move(3,1);
 			}
-			#if USING_SOFTSTART == 1
-			else {
-				ss_s_done[2] = 0;
-				ss_s_step[2] = 0
-			}
-			#endif
 
 			// refresh current drives positions
 			drive_state[0] = motor_pos[0] * M0_RATIO;
@@ -330,33 +302,11 @@ void toggle_servo_signal(uint8_t servo) {
  * Changes software PWM overflow controlling servo position, by move
  */
 void servo_move(uint8_t servo, uint8_t dir) {
-	#if USING_SOFTSTART == 1
-	if (dir==1 && servo_pos_raw[servo]<SERVO_MAX) {
-		if (servo_speed+5>SOFTSTART_S_STEPS) {
-			servo_pos_raw[servo] += (servo_speed + SERVO_MIN_SPEED) - SOFTSTART_S_STEPS+ss_s_step[servo];
-		} else {
-			servo_pos_raw[servo] += (servo_speed + SERVO_MIN_SPEED);
-		}
-	} else if (dir==0 && servo_pos_raw[servo]>SERVO_MIN) {
-		if (servo_speed+5>SOFTSTART_S_STEPS) {
-			servo_pos_raw[servo] -= (servo_speed + SERVO_MIN_SPEED) + SOFTSTART_S_STEPS-ss_s_step[servo];
-		} else {
-			servo_pos_raw[servo] -= (servo_speed + SERVO_MIN_SPEED);
-		}
-	}
-	if (ss_s_step[servo]<SOFTSTART_S_STEPS && ss_s_done[servo] != 1) {
-		ss_s_step[servo]++;
-	} else {
-		ss_s_done[servo] = 1;	// flaga prawdy - zakoñczono softstart
-		ss_s_step[servo] = 0;	// zeruje flagê kroku
-	}
-	#else
 	if (dir==1 && servo_pos_raw[servo]<SERVO_MAX) {
 		servo_pos_raw[servo] += (servo_speed + SERVO_MIN_SPEED);
 	} else if (dir==0 && servo_pos_raw[servo]>SERVO_MIN) {
 		servo_pos_raw[servo] -= (servo_speed + SERVO_MIN_SPEED);
 	}
-	#endif
 }
 
 /*

@@ -8,11 +8,6 @@
 #ifndef ATMEGA_SLAVE_CONF_H_
 #define ATMEGA_SLAVE_CONF_H_
 
-// w³¹cznik softstart'u
-#define USING_SOFTSTART			0
-#define SOFTSTART_M_STEPS		40
-#define SOFTSTART_S_STEPS		40
-
 // porty SPI
 #define MISO		(1<<PB4)
 
