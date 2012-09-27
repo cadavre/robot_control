@@ -148,7 +148,7 @@ void lcd_refresh(void) {
 	lcd_locate(0,12);
 	lcd_str("SPD");
 	lcd_locate(1,12);
-	lcd_int( 20+((drive_state[5]*100)/255) );	// +20 dla prêdkoœci 20-100% bo pomiar wychodzi 0-80%
+	lcd_int(drive_state[5]);
 	lcd_locate(1,15);
 	lcd_char('%');
 

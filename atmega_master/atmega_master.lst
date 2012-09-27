@@ -314,240 +314,219 @@
  334 0166 6CE0      		ldi r22,lo8(12)
  335 0168 00D0      		rcall lcd_locate
  336               	.LM59:
- 337 016a 9091 0000 		lds r25,drive_state+5
- 338 016e 84E6      		ldi r24,lo8(100)
- 339 0170 989F      		mul r25,r24
- 340 0172 C001      		movw r24,r0
- 341 0174 1124      		clr r1
- 342 0176 6FEF      		ldi r22,lo8(255)
- 343 0178 70E0      		ldi r23,hi8(255)
- 344 017a 00D0      		rcall __divmodhi4
- 345 017c CB01      		movw r24,r22
- 346 017e 4496      		adiw r24,20
- 347 0180 00D0      		rcall lcd_int
- 348               	.LM60:
- 349 0182 81E0      		ldi r24,lo8(1)
- 350 0184 6FE0      		ldi r22,lo8(15)
- 351 0186 00D0      		rcall lcd_locate
- 352               	.LM61:
- 353 0188 85E2      		ldi r24,lo8(37)
- 354 018a 00D0      		rcall lcd_char
- 355               	/* epilogue start */
- 356               	.LM62:
- 357 018c DF91      		pop r29
- 358 018e CF91      		pop r28
- 359 0190 0895      		ret
- 360               	.LFE7:
- 362               		.data
- 363               	.LC6:
- 364 0012 0D0A 2323 		.string	"\r\n#### Report ####"
- 364      2323 2052 
- 364      6570 6F72 
- 364      7420 2323 
- 364      2323 00
- 365               	.LC7:
- 366 0025 0D0A 4472 		.string	"\r\nDrive J1: "
- 366      6976 6520 
- 366      4A31 3A20 
- 366      00
- 367               	.LC8:
- 368 0032 0D0A 4472 		.string	"\r\nDrive J2: "
- 368      6976 6520 
- 368      4A32 3A20 
- 368      00
- 369               	.LC9:
- 370 003f 0D0A 4472 		.string	"\r\nDrive D3: "
- 370      6976 6520 
- 370      4433 3A20 
- 370      00
- 371               	.LC10:
- 372 004c 0D0A 4472 		.string	"\r\nDrive J4: "
- 372      6976 6520 
- 372      4A34 3A20 
- 372      00
- 373               	.LC11:
- 374 0059 0D0A 5370 		.string	"\r\nSpeed: "
- 374      6565 643A 
- 374      2000 
- 375               		.text
- 376               	.global	USART_send_report
- 378               	USART_send_report:
- 379               	.LFB8:
- 380               	.LM63:
- 381               	/* prologue: function */
- 382               	/* frame size = 0 */
- 383               	/* stack size = 0 */
- 384               	.L__stack_usage = 0
- 385               	.LM64:
- 386 0192 80E0      		ldi r24,lo8(.LC6)
- 387 0194 90E0      		ldi r25,hi8(.LC6)
- 388 0196 00D0      		rcall USART_string
- 389               	.LM65:
- 390 0198 80E0      		ldi r24,lo8(.LC7)
- 391 019a 90E0      		ldi r25,hi8(.LC7)
- 392 019c 00D0      		rcall USART_string
- 393               	.LM66:
- 394 019e 8091 0000 		lds r24,drive_state
- 395 01a2 90E0      		ldi r25,lo8(0)
- 396 01a4 00D0      		rcall USART_int
- 397               	.LM67:
- 398 01a6 80E0      		ldi r24,lo8(.LC8)
- 399 01a8 90E0      		ldi r25,hi8(.LC8)
- 400 01aa 00D0      		rcall USART_string
- 401               	.LM68:
- 402 01ac 8091 0000 		lds r24,drive_state+1
- 403 01b0 90E0      		ldi r25,lo8(0)
- 404 01b2 00D0      		rcall USART_int
- 405               	.LM69:
- 406 01b4 80E0      		ldi r24,lo8(.LC9)
- 407 01b6 90E0      		ldi r25,hi8(.LC9)
- 408 01b8 00D0      		rcall USART_string
- 409               	.LM70:
- 410 01ba 8091 0000 		lds r24,drive_state+2
- 411 01be 90E0      		ldi r25,lo8(0)
- 412 01c0 00D0      		rcall USART_int
- 413               	.LM71:
- 414 01c2 80E0      		ldi r24,lo8(.LC10)
- 415 01c4 90E0      		ldi r25,hi8(.LC10)
- 416 01c6 00D0      		rcall USART_string
- 417               	.LM72:
- 418 01c8 8091 0000 		lds r24,drive_state+3
- 419 01cc 90E0      		ldi r25,lo8(0)
- 420 01ce 00D0      		rcall USART_int
- 421               	.LM73:
- 422 01d0 80E0      		ldi r24,lo8(.LC11)
- 423 01d2 90E0      		ldi r25,hi8(.LC11)
- 424 01d4 00D0      		rcall USART_string
- 425               	.LM74:
- 426 01d6 8091 0000 		lds r24,drive_state+5
- 427 01da 90E0      		ldi r25,lo8(0)
- 428 01dc 00D0      		rcall USART_int
- 429               	/* epilogue start */
- 430               	.LM75:
- 431 01de 0895      		ret
- 432               	.LFE8:
- 434               	.global	main
- 436               	main:
- 437               	.LFB6:
- 438               	.LM76:
- 439 01e0 1F93      		push r17
- 440               	/* prologue: function */
- 441               	/* frame size = 0 */
- 442               	/* stack size = 1 */
- 443               	.L__stack_usage = 1
- 444               	.LM77:
- 445 01e2 00D0      		rcall Timer2_init
- 446               	.LM78:
- 447 01e4 00D0      		rcall SPI_init
- 448               	.LM79:
- 449 01e6 83E3      		ldi r24,lo8(51)
- 450 01e8 90E0      		ldi r25,hi8(51)
- 451 01ea 00D0      		rcall USART_init
- 452               	.LM80:
- 453 01ec 88E9      		ldi r24,lo8(-104)
- 454 01ee 81BF      		out 81-32,r24
- 455               	.LM81:
- 456               	/* #APP */
- 457               	 ;  95 "atmega_master.c" 1
- 458 01f0 7894      		sei
- 459               	 ;  0 "" 2
- 460               	.LM82:
- 461               	/* #NOAPP */
- 462 01f2 00D0      		rcall lcd_init
- 463               	.LM83:
- 464 01f4 80E8      		ldi r24,lo8(-128)
- 465 01f6 60E0      		ldi r22,lo8(deg_sign)
- 466 01f8 70E0      		ldi r23,hi8(deg_sign)
- 467 01fa 00D0      		rcall lcd_defchar
- 468               	.LM84:
- 469 01fc 10E5      		ldi r17,lo8(80)
- 470               	.L21:
- 471 01fe 8091 0000 		lds r24,refresh_flag
- 472 0202 612F      		mov r22,r17
- 473 0204 00D0      		rcall __udivmodqi4
- 474 0206 9923      		tst r25
- 475 0208 01F4      		brne .L14
- 476               	.LM85:
- 477 020a 00D0      		rcall lcd_refresh
- 478               	.L14:
- 479               	.LM86:
- 480 020c 9091 0000 		lds r25,refresh_flag
- 481 0210 81E0      		ldi r24,lo8(1)
- 482 0212 9C3F      		cpi r25,lo8(-4)
- 483 0214 00F4      		brsh .L16
- 484 0216 80E0      		ldi r24,lo8(0)
- 485               	.L16:
- 486 0218 8195      		neg r24
- 487 021a 880F      		lsl r24
- 488 021c 880F      		lsl r24
- 489 021e 9817      		cp r25,r24
- 490 0220 01F4      		brne .L15
- 491               	.LM87:
- 492 0222 00D0      		rcall USART_send_report
- 493               	.L15:
- 494               	.LM88:
- 495 0224 8091 0000 		lds r24,refresh_flag
- 496 0228 8F3F      		cpi r24,lo8(-1)
- 497 022a 01F4      		brne .L21
- 498               	.LM89:
- 499 022c 1092 0000 		sts refresh_flag,__zero_reg__
- 500 0230 00C0      		rjmp .L21
- 501               	.LFE6:
- 503               	.global	btn_state
- 504               	.global	btn_state
- 505               		.section .bss
- 508               	btn_state:
- 509 0000 0000 0000 		.skip 6,0
- 509      0000 
- 510               	.global	drive_state
- 511               	.global	drive_state
- 514               	drive_state:
- 515 0006 0000 0000 		.skip 6,0
- 515      0000 
- 516               	.global	deg_sign
- 517               		.data
- 520               	deg_sign:
- 521 0063 06        		.byte	6
- 522 0064 09        		.byte	9
- 523 0065 09        		.byte	9
- 524 0066 06        		.byte	6
- 525 0067 00        		.byte	0
- 526 0068 00        		.byte	0
- 527 0069 00        		.byte	0
- 528 006a 00        		.byte	0
- 529               	.global	refresh_flag
- 530               	.global	refresh_flag
- 531               		.section .bss
- 534               	refresh_flag:
- 535 000c 00        		.skip 1,0
- 536               	.global	j
- 537               	.global	j
- 540               	j:
- 541 000d 00        		.skip 1,0
- 542               		.comm btn_sign,1,1
- 631               	.Letext0:
+ 337 016a 8091 0000 		lds r24,drive_state+5
+ 338 016e 90E0      		ldi r25,lo8(0)
+ 339 0170 00D0      		rcall lcd_int
+ 340               	.LM60:
+ 341 0172 81E0      		ldi r24,lo8(1)
+ 342 0174 6FE0      		ldi r22,lo8(15)
+ 343 0176 00D0      		rcall lcd_locate
+ 344               	.LM61:
+ 345 0178 85E2      		ldi r24,lo8(37)
+ 346 017a 00D0      		rcall lcd_char
+ 347               	/* epilogue start */
+ 348               	.LM62:
+ 349 017c DF91      		pop r29
+ 350 017e CF91      		pop r28
+ 351 0180 0895      		ret
+ 352               	.LFE7:
+ 354               	.global	main
+ 356               	main:
+ 357               	.LFB6:
+ 358               	.LM63:
+ 359 0182 1F93      		push r17
+ 360               	/* prologue: function */
+ 361               	/* frame size = 0 */
+ 362               	/* stack size = 1 */
+ 363               	.L__stack_usage = 1
+ 364               	.LM64:
+ 365 0184 00D0      		rcall Timer2_init
+ 366               	.LM65:
+ 367 0186 00D0      		rcall SPI_init
+ 368               	.LM66:
+ 369 0188 83E3      		ldi r24,lo8(51)
+ 370 018a 90E0      		ldi r25,hi8(51)
+ 371 018c 00D0      		rcall USART_init
+ 372               	.LM67:
+ 373 018e 88E9      		ldi r24,lo8(-104)
+ 374 0190 81BF      		out 81-32,r24
+ 375               	.LM68:
+ 376               	/* #APP */
+ 377               	 ;  95 "atmega_master.c" 1
+ 378 0192 7894      		sei
+ 379               	 ;  0 "" 2
+ 380               	.LM69:
+ 381               	/* #NOAPP */
+ 382 0194 00D0      		rcall lcd_init
+ 383               	.LM70:
+ 384 0196 80E8      		ldi r24,lo8(-128)
+ 385 0198 60E0      		ldi r22,lo8(deg_sign)
+ 386 019a 70E0      		ldi r23,hi8(deg_sign)
+ 387 019c 00D0      		rcall lcd_defchar
+ 388               	.LM71:
+ 389 019e 10E5      		ldi r17,lo8(80)
+ 390               	.L18:
+ 391 01a0 8091 0000 		lds r24,refresh_flag
+ 392 01a4 612F      		mov r22,r17
+ 393 01a6 00D0      		rcall __udivmodqi4
+ 394 01a8 9923      		tst r25
+ 395 01aa 01F4      		brne .L13
+ 396               	.LM72:
+ 397 01ac 00D0      		rcall lcd_refresh
+ 398               	.L13:
+ 399               	.LM73:
+ 400 01ae 8091 0000 		lds r24,refresh_flag
+ 401               	.LM74:
+ 402 01b2 8091 0000 		lds r24,refresh_flag
+ 403 01b6 8F3F      		cpi r24,lo8(-1)
+ 404 01b8 01F4      		brne .L18
+ 405               	.LM75:
+ 406 01ba 1092 0000 		sts refresh_flag,__zero_reg__
+ 407 01be 00C0      		rjmp .L18
+ 408               	.LFE6:
+ 410               		.data
+ 411               	.LC6:
+ 412 0012 0D0A 2323 		.string	"\r\n#### Report ####"
+ 412      2323 2052 
+ 412      6570 6F72 
+ 412      7420 2323 
+ 412      2323 00
+ 413               	.LC7:
+ 414 0025 0D0A 4472 		.string	"\r\nDrive J1: "
+ 414      6976 6520 
+ 414      4A31 3A20 
+ 414      00
+ 415               	.LC8:
+ 416 0032 0D0A 4472 		.string	"\r\nDrive J2: "
+ 416      6976 6520 
+ 416      4A32 3A20 
+ 416      00
+ 417               	.LC9:
+ 418 003f 0D0A 4472 		.string	"\r\nDrive D3: "
+ 418      6976 6520 
+ 418      4433 3A20 
+ 418      00
+ 419               	.LC10:
+ 420 004c 0D0A 4472 		.string	"\r\nDrive J4: "
+ 420      6976 6520 
+ 420      4A34 3A20 
+ 420      00
+ 421               	.LC11:
+ 422 0059 0D0A 5370 		.string	"\r\nSpeed: "
+ 422      6565 643A 
+ 422      2000 
+ 423               		.text
+ 424               	.global	USART_send_report
+ 426               	USART_send_report:
+ 427               	.LFB8:
+ 428               	.LM76:
+ 429               	/* prologue: function */
+ 430               	/* frame size = 0 */
+ 431               	/* stack size = 0 */
+ 432               	.L__stack_usage = 0
+ 433               	.LM77:
+ 434 01c0 80E0      		ldi r24,lo8(.LC6)
+ 435 01c2 90E0      		ldi r25,hi8(.LC6)
+ 436 01c4 00D0      		rcall USART_string
+ 437               	.LM78:
+ 438 01c6 80E0      		ldi r24,lo8(.LC7)
+ 439 01c8 90E0      		ldi r25,hi8(.LC7)
+ 440 01ca 00D0      		rcall USART_string
+ 441               	.LM79:
+ 442 01cc 8091 0000 		lds r24,drive_state
+ 443 01d0 90E0      		ldi r25,lo8(0)
+ 444 01d2 00D0      		rcall USART_int
+ 445               	.LM80:
+ 446 01d4 80E0      		ldi r24,lo8(.LC8)
+ 447 01d6 90E0      		ldi r25,hi8(.LC8)
+ 448 01d8 00D0      		rcall USART_string
+ 449               	.LM81:
+ 450 01da 8091 0000 		lds r24,drive_state+1
+ 451 01de 90E0      		ldi r25,lo8(0)
+ 452 01e0 00D0      		rcall USART_int
+ 453               	.LM82:
+ 454 01e2 80E0      		ldi r24,lo8(.LC9)
+ 455 01e4 90E0      		ldi r25,hi8(.LC9)
+ 456 01e6 00D0      		rcall USART_string
+ 457               	.LM83:
+ 458 01e8 8091 0000 		lds r24,drive_state+2
+ 459 01ec 90E0      		ldi r25,lo8(0)
+ 460 01ee 00D0      		rcall USART_int
+ 461               	.LM84:
+ 462 01f0 80E0      		ldi r24,lo8(.LC10)
+ 463 01f2 90E0      		ldi r25,hi8(.LC10)
+ 464 01f4 00D0      		rcall USART_string
+ 465               	.LM85:
+ 466 01f6 8091 0000 		lds r24,drive_state+3
+ 467 01fa 90E0      		ldi r25,lo8(0)
+ 468 01fc 00D0      		rcall USART_int
+ 469               	.LM86:
+ 470 01fe 80E0      		ldi r24,lo8(.LC11)
+ 471 0200 90E0      		ldi r25,hi8(.LC11)
+ 472 0202 00D0      		rcall USART_string
+ 473               	.LM87:
+ 474 0204 8091 0000 		lds r24,drive_state+5
+ 475 0208 90E0      		ldi r25,lo8(0)
+ 476 020a 00D0      		rcall USART_int
+ 477               	/* epilogue start */
+ 478               	.LM88:
+ 479 020c 0895      		ret
+ 480               	.LFE8:
+ 482               	.global	btn_state
+ 483               	.global	btn_state
+ 484               		.section .bss
+ 487               	btn_state:
+ 488 0000 0000 0000 		.skip 6,0
+ 488      0000 
+ 489               	.global	drive_state
+ 490               	.global	drive_state
+ 493               	drive_state:
+ 494 0006 0000 0000 		.skip 6,0
+ 494      0000 
+ 495               	.global	deg_sign
+ 496               		.data
+ 499               	deg_sign:
+ 500 0063 06        		.byte	6
+ 501 0064 09        		.byte	9
+ 502 0065 09        		.byte	9
+ 503 0066 06        		.byte	6
+ 504 0067 00        		.byte	0
+ 505 0068 00        		.byte	0
+ 506 0069 00        		.byte	0
+ 507 006a 00        		.byte	0
+ 508               	.global	refresh_flag
+ 509               	.global	refresh_flag
+ 510               		.section .bss
+ 513               	refresh_flag:
+ 514 000c 00        		.skip 1,0
+ 515               	.global	j
+ 516               	.global	j
+ 519               	j:
+ 520 000d 00        		.skip 1,0
+ 521               		.comm btn_sign,1,1
+ 610               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 atmega_master.c
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:2      *ABS*:0000003f __SREG__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:3      *ABS*:0000003e __SP_H__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:4      *ABS*:0000003d __SP_L__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:5      *ABS*:00000034 __CCP__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:18     .text:00000000 Timer2_init
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:47     .text:00000018 SPI_init
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:71     .text:00000028 SPI_SS_low
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:87     .text:0000002c SPI_SS_high
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:103    .text:00000030 SPI_transfer
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:127    .text:0000003a __vector_3
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:540    .bss:0000000d j
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:508    .bss:00000000 btn_state
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:514    .bss:00000006 drive_state
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:534    .bss:0000000c refresh_flag
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:226    .text:000000c8 lcd_refresh
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:378    .text:00000192 USART_send_report
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:436    .text:000001e0 main
-C:\Users\cadavre\AppData\Local\Temp\ccHkfcDf.s:520    .data:00000063 deg_sign
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:2      *ABS*:0000003f __SREG__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:3      *ABS*:0000003e __SP_H__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:4      *ABS*:0000003d __SP_L__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:5      *ABS*:00000034 __CCP__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:18     .text:00000000 Timer2_init
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:47     .text:00000018 SPI_init
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:71     .text:00000028 SPI_SS_low
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:87     .text:0000002c SPI_SS_high
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:103    .text:00000030 SPI_transfer
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:127    .text:0000003a __vector_3
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:519    .bss:0000000d j
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:487    .bss:00000000 btn_state
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:493    .bss:00000006 drive_state
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:513    .bss:0000000c refresh_flag
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:226    .text:000000c8 lcd_refresh
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:356    .text:00000182 main
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:499    .data:00000063 deg_sign
+C:\Users\cadavre\AppData\Local\Temp\ccvRvlsL.s:426    .text:000001c0 USART_send_report
                             *COM*:00000001 btn_sign
 
 UNDEFINED SYMBOLS
@@ -555,13 +534,12 @@ lcd_cls
 lcd_locate
 lcd_str
 lcd_int
-__divmodhi4
 lcd_char
-USART_string
-USART_int
 USART_init
 lcd_init
 lcd_defchar
 __udivmodqi4
+USART_string
+USART_int
 __do_copy_data
 __do_clear_bss

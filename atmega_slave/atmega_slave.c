@@ -14,7 +14,8 @@
  */
 volatile uint8_t motor_current_step[2] = {1,1};		// 1-8
 volatile uint16_t motor_pos[2] = {0,5};
-volatile uint8_t motor_speed[2] = {100,100};
+volatile uint8_t set_speed = 0;
+volatile uint8_t motor_speed[2] = {0,0};
 
 /*
  * Variables for SPI
@@ -104,16 +105,16 @@ ISR(TIMER0_OVF_vect) {
 
 	if (stepper_flag[0] == 0) {
 		if (1 || btn_state[0]==BTN_L) {
-			motor_move(0,0);
+			//motor_move(0,0);
 		} else if (btn_state[0]==BTN_R) {
-			motor_move(0,1);
+			//motor_move(0,1);
 		}
 	}
 	if (stepper_flag[1] == 0) {
 		if (1 || btn_state[3]==BTN_L) {
 			motor_move(1,0);
 		} else if (btn_state[3]==BTN_R) {
-			motor_move(1,1);
+			//motor_move(1,1);
 		}
 	}
 }
@@ -125,7 +126,7 @@ ISR(TIMER0_OVF_vect) {
  */
 ISR(ADC_vect) {
 	// 0 - 255
-	drive_state[5] = ADCH;
+	set_speed = drive_state[5] = ADCH;
 }
 
 /************************************************* MAIN *************************************************/
@@ -140,22 +141,6 @@ int main(void)
 	{
 		if (btn_get_flag==BTN_GET_ON) {
 
-			/* buttons for servos
-			if (btn_state[4]==BTN_L) {
-				servo_move(0,0);
-				servo_move(1,1);
-			} else if (btn_state[4]==BTN_R) {
-				servo_move(0,1);
-				servo_move(1,0);
-			}
-			if (btn_state[2]==BTN_L) {
-				servo_move(2,0);
-				servo_move(3,0);
-			} else if (btn_state[2]==BTN_R) {
-				servo_move(2,1);
-				servo_move(3,1);
-			}*/
-
 			// refresh current drives positions
 			//drive_state[0] = motor_pos[0] * M0_RATIO;
 			//drive_state[1] = (servo_pos_raw[1] - SERVO_MIN+50) / SERVO_STEPS_PER_DEG;		// +50 dla wyrównania 0 stopni
@@ -166,19 +151,19 @@ int main(void)
 			ADCSRA |= (1<<ADSC);
 
 			// set motors speed
-			if (s_speed > M0_SPD_H) {
+			if (set_speed > M0_SPD_H) {
 				motor_speed[0] = M0_SPD_H;
-			} else if (s_speed < M0_SPD_L) {
+			} else if (set_speed < M0_SPD_L) {
 				motor_speed[0] = M0_SPD_L;
 			} else {
-				motor_speed[0] = s_speed;
+				motor_speed[0] = set_speed;
 			}
-			if (s_speed > M1_SPD_H) {
+			if (set_speed > M1_SPD_H) {
 				motor_speed[1] = M1_SPD_H;
-			} else if (s_speed < M0_SPD_L) {
+			} else if (set_speed < M1_SPD_L) {
 				motor_speed[1] = M1_SPD_L;
 			} else {
-				motor_speed[1] = s_speed;
+				motor_speed[1] = set_speed;
 			}
 
 			// clear button flag
@@ -193,10 +178,10 @@ int main(void)
  *	Toggle ports states to switch coil set - make step
  */
 void motor_make_step(uint8_t motor, uint8_t step) {
-	if (step>8) {
+	if (step>4) {
 		step = 1;
 	} else if (step<1) {
-		step = 8;
+		step = 4;
 	}
 	if (motor==0) {
 		switch(step) {
@@ -240,16 +225,16 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 				M1_STEP4;
 				break;
 			case 5:
-				M1_STEP5;
+				//M1_STEP5;
 				break;
 			case 6:
-				M1_STEP6;
+				//M1_STEP6;
 				break;
 			case 7:
-				M1_STEP7;
+				//M1_STEP7;
 				break;
 			case 8:
-				M1_STEP8;
+				//M1_STEP8;
 				break;
 		}
 	}

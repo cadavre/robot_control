@@ -3,33 +3,33 @@ atmega_slave.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000003b6  00000000  00000000  00000094  2**1
+  0 .text         00000378  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000008  00800060  000003b6  0000044a  2**0
+  1 .data         00000006  00800060  00000378  0000040c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000010  00800068  00800068  00000452  2**0
+  2 .bss          00000013  00800066  00800066  00000412  2**0
                   ALLOC
-  3 .stab         000006cc  00000000  00000000  00000454  2**2
+  3 .stab         000006cc  00000000  00000000  00000414  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000085  00000000  00000000  00000b20  2**0
+  4 .stabstr      00000085  00000000  00000000  00000ae0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_aranges 00000020  00000000  00000000  00000ba5  2**0
+  5 .debug_aranges 00000020  00000000  00000000  00000b65  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_pubnames 00000127  00000000  00000000  00000bc5  2**0
+  6 .debug_pubnames 00000135  00000000  00000000  00000b85  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00000306  00000000  00000000  00000cec  2**0
+  7 .debug_info   00000321  00000000  00000000  00000cba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00000139  00000000  00000000  00000ff2  2**0
+  8 .debug_abbrev 00000113  00000000  00000000  00000fdb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00000402  00000000  00000000  0000112b  2**0
+  9 .debug_line   00000404  00000000  00000000  000010ee  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000000b0  00000000  00000000  00001530  2**2
+ 10 .debug_frame  000000b0  00000000  00000000  000014f4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    0000017a  00000000  00000000  000015e0  2**0
+ 11 .debug_str    00000184  00000000  00000000  000015a4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00000078  00000000  00000000  0000175a  2**0
+ 12 .debug_loc    00000078  00000000  00000000  00001728  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_pubtypes 0000002b  00000000  00000000  000017d2  2**0
+ 13 .debug_pubtypes 0000002b  00000000  00000000  000017a0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -44,7 +44,7 @@ Disassembly of section .text:
    c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
    e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
   10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
-  12:	78 c1       	rjmp	.+752    	; 0x304 <__vector_9>
+  12:	5d c1       	rjmp	.+698    	; 0x2ce <__vector_9>
   14:	53 c0       	rjmp	.+166    	; 0xbc <__vector_10>
   16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
   18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
@@ -67,18 +67,18 @@ Disassembly of section .text:
   32:	10 e0       	ldi	r17, 0x00	; 0
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	e6 eb       	ldi	r30, 0xB6	; 182
+  38:	e8 e7       	ldi	r30, 0x78	; 120
   3a:	f3 e0       	ldi	r31, 0x03	; 3
   3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
   3e:	05 90       	lpm	r0, Z+
   40:	0d 92       	st	X+, r0
-  42:	a8 36       	cpi	r26, 0x68	; 104
+  42:	a6 36       	cpi	r26, 0x66	; 102
   44:	b1 07       	cpc	r27, r17
   46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
 
 00000048 <__do_clear_bss>:
   48:	10 e0       	ldi	r17, 0x00	; 0
-  4a:	a8 e6       	ldi	r26, 0x68	; 104
+  4a:	a6 e6       	ldi	r26, 0x66	; 102
   4c:	b0 e0       	ldi	r27, 0x00	; 0
   4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
 
@@ -86,11 +86,11 @@ Disassembly of section .text:
   50:	1d 92       	st	X+, r1
 
 00000052 <.do_clear_bss_start>:
-  52:	a8 37       	cpi	r26, 0x78	; 120
+  52:	a9 37       	cpi	r26, 0x79	; 121
   54:	b1 07       	cpc	r27, r17
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
-  58:	6a d0       	rcall	.+212    	; 0x12e <main>
-  5a:	ab c1       	rjmp	.+854    	; 0x3b2 <_exit>
+  58:	6e d0       	rcall	.+220    	; 0x136 <main>
+  5a:	8c c1       	rjmp	.+792    	; 0x374 <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
@@ -127,10 +127,10 @@ void motor_ports_init(void) {
   80:	82 bb       	out	0x12, r24	; 18
 	M1_STEP1;
   82:	85 b3       	in	r24, 0x15	; 21
-  84:	84 62       	ori	r24, 0x24	; 36
+  84:	88 61       	ori	r24, 0x18	; 24
   86:	85 bb       	out	0x15, r24	; 21
   88:	85 b3       	in	r24, 0x15	; 21
-  8a:	87 7e       	andi	r24, 0xE7	; 231
+  8a:	8b 7d       	andi	r24, 0xDB	; 219
   8c:	85 bb       	out	0x15, r24	; 21
 }
   8e:	08 95       	ret
@@ -207,29 +207,29 @@ ISR(SPI_STC_vect) {
   c8:	ef 93       	push	r30
   ca:	ff 93       	push	r31
 	btn_state[j] = SPDR;
-  cc:	e0 91 74 00 	lds	r30, 0x0074
+  cc:	e0 91 75 00 	lds	r30, 0x0075
   d0:	f0 e0       	ldi	r31, 0x00	; 0
   d2:	8f b1       	in	r24, 0x0f	; 15
-  d4:	e2 59       	subi	r30, 0x92	; 146
+  d4:	e1 59       	subi	r30, 0x91	; 145
   d6:	ff 4f       	sbci	r31, 0xFF	; 255
   d8:	80 83       	st	Z, r24
 	if(j<5) {
-  da:	80 91 74 00 	lds	r24, 0x0074
+  da:	80 91 75 00 	lds	r24, 0x0075
   de:	85 30       	cpi	r24, 0x05	; 5
   e0:	30 f4       	brcc	.+12     	; 0xee <__vector_10+0x32>
 		j++;
-  e2:	80 91 74 00 	lds	r24, 0x0074
+  e2:	80 91 75 00 	lds	r24, 0x0075
   e6:	8f 5f       	subi	r24, 0xFF	; 255
-  e8:	80 93 74 00 	sts	0x0074, r24
+  e8:	80 93 75 00 	sts	0x0075, r24
   ec:	02 c0       	rjmp	.+4      	; 0xf2 <__vector_10+0x36>
 	} else {
 		j = 0;
-  ee:	10 92 74 00 	sts	0x0074, r1
+  ee:	10 92 75 00 	sts	0x0075, r1
 	}
 	SPDR = drive_state[j];
-  f2:	e0 91 74 00 	lds	r30, 0x0074
+  f2:	e0 91 75 00 	lds	r30, 0x0075
   f6:	f0 e0       	ldi	r31, 0x00	; 0
-  f8:	e8 59       	subi	r30, 0x98	; 152
+  f8:	e7 59       	subi	r30, 0x97	; 151
   fa:	ff 4f       	sbci	r31, 0xFF	; 255
   fc:	80 81       	ld	r24, Z
   fe:	8f b9       	out	0x0f, r24	; 15
@@ -257,469 +257,428 @@ ISR(ADC_vect) {
  118:	11 24       	eor	r1, r1
  11a:	8f 93       	push	r24
 	// 0 - 255
-	drive_state[5] = ADCH;
+	set_speed = drive_state[5] = ADCH;
  11c:	85 b1       	in	r24, 0x05	; 5
- 11e:	80 93 6d 00 	sts	0x006D, r24
+ 11e:	80 93 6e 00 	sts	0x006E, r24
+ 122:	80 91 6e 00 	lds	r24, 0x006E
+ 126:	80 93 66 00 	sts	0x0066, r24
 }
- 122:	8f 91       	pop	r24
- 124:	0f 90       	pop	r0
- 126:	0f be       	out	0x3f, r0	; 63
- 128:	0f 90       	pop	r0
- 12a:	1f 90       	pop	r1
- 12c:	18 95       	reti
+ 12a:	8f 91       	pop	r24
+ 12c:	0f 90       	pop	r0
+ 12e:	0f be       	out	0x3f, r0	; 63
+ 130:	0f 90       	pop	r0
+ 132:	1f 90       	pop	r1
+ 134:	18 95       	reti
 
-0000012e <main>:
+00000136 <main>:
 
 /************************************************* MAIN *************************************************/
 int main(void)
 {
 	motor_ports_init();
- 12e:	97 df       	rcall	.-210    	; 0x5e <motor_ports_init>
+ 136:	93 df       	rcall	.-218    	; 0x5e <motor_ports_init>
 	Timer0_init();
- 130:	be df       	rcall	.-132    	; 0xae <Timer0_init>
+ 138:	ba df       	rcall	.-140    	; 0xae <Timer0_init>
 	SPI_init();
- 132:	b8 df       	rcall	.-144    	; 0xa4 <SPI_init>
+ 13a:	b4 df       	rcall	.-152    	; 0xa4 <SPI_init>
 	ADC_init();
- 134:	ad df       	rcall	.-166    	; 0x90 <ADC_init>
+ 13c:	a9 df       	rcall	.-174    	; 0x90 <ADC_init>
 	sei();
- 136:	78 94       	sei
+ 13e:	78 94       	sei
+				motor_speed[0] = M0_SPD_L;
+			} else {
+				motor_speed[0] = set_speed;
+			}
+			if (set_speed > M1_SPD_H) {
+				motor_speed[1] = M1_SPD_H;
+ 140:	8b e9       	ldi	r24, 0x9B	; 155
+	SPI_init();
+	ADC_init();
+	sei();
 	while(1)
 	{
 		if (btn_get_flag==BTN_GET_ON) {
- 138:	80 91 75 00 	lds	r24, 0x0075
- 13c:	84 30       	cpi	r24, 0x04	; 4
- 13e:	e1 f7       	brne	.-8      	; 0x138 <main+0xa>
+ 142:	90 91 76 00 	lds	r25, 0x0076
+ 146:	94 30       	cpi	r25, 0x04	; 4
+ 148:	e1 f7       	brne	.-8      	; 0x142 <main+0xc>
 			//drive_state[1] = (servo_pos_raw[1] - SERVO_MIN+50) / SERVO_STEPS_PER_DEG;		// +50 dla wyrównania 0 stopni
 			//drive_state[2] = motor_pos[1] / M1_RATIO;																					// TEMP: dzielenie zamiast mno¿enia!
 			//drive_state[3] = (servo_pos_raw[2] - SERVO_MIN+50) / SERVO_STEPS_PER_DEG;
 
 			// measure value for speed
 			ADCSRA |= (1<<ADSC);
- 140:	36 9a       	sbi	0x06, 6	; 6
+ 14a:	36 9a       	sbi	0x06, 6	; 6
+
+			// set motors speed
+			if (set_speed > M0_SPD_H) {
+ 14c:	90 91 66 00 	lds	r25, 0x0066
+ 150:	9c 39       	cpi	r25, 0x9C	; 156
+ 152:	18 f0       	brcs	.+6      	; 0x15a <main+0x24>
+				motor_speed[0] = M0_SPD_H;
+ 154:	80 93 67 00 	sts	0x0067, r24
+ 158:	06 c0       	rjmp	.+12     	; 0x166 <main+0x30>
+			} else if (set_speed < M0_SPD_L) {
+ 15a:	90 91 66 00 	lds	r25, 0x0066
+				motor_speed[0] = M0_SPD_L;
 			} else {
-				motor_speed[1] = servo_speed;
-			}*/
+				motor_speed[0] = set_speed;
+ 15e:	90 91 66 00 	lds	r25, 0x0066
+ 162:	90 93 67 00 	sts	0x0067, r25
+			}
+			if (set_speed > M1_SPD_H) {
+ 166:	90 91 66 00 	lds	r25, 0x0066
+ 16a:	9c 39       	cpi	r25, 0x9C	; 156
+ 16c:	18 f0       	brcs	.+6      	; 0x174 <main+0x3e>
+				motor_speed[1] = M1_SPD_H;
+ 16e:	80 93 68 00 	sts	0x0068, r24
+ 172:	06 c0       	rjmp	.+12     	; 0x180 <main+0x4a>
+			} else if (set_speed < M1_SPD_L) {
+ 174:	90 91 66 00 	lds	r25, 0x0066
+				motor_speed[1] = M1_SPD_L;
+			} else {
+				motor_speed[1] = set_speed;
+ 178:	90 91 66 00 	lds	r25, 0x0066
+ 17c:	90 93 68 00 	sts	0x0068, r25
+			}
 
 			// clear button flag
 			btn_get_flag = 0;
- 142:	10 92 75 00 	sts	0x0075, r1
- 146:	f8 cf       	rjmp	.-16     	; 0x138 <main+0xa>
+ 180:	10 92 76 00 	sts	0x0076, r1
+ 184:	de cf       	rjmp	.-68     	; 0x142 <main+0xc>
 
-00000148 <motor_make_step>:
+00000186 <motor_make_step>:
 
 /*
  *	Toggle ports states to switch coil set - make step
  */
 void motor_make_step(uint8_t motor, uint8_t step) {
-	if (step>8) {
- 148:	69 30       	cpi	r22, 0x09	; 9
- 14a:	18 f4       	brcc	.+6      	; 0x152 <motor_make_step+0xa>
+	if (step>4) {
+ 186:	65 30       	cpi	r22, 0x05	; 5
+ 188:	18 f4       	brcc	.+6      	; 0x190 <motor_make_step+0xa>
 		step = 1;
 	} else if (step<1) {
- 14c:	66 23       	and	r22, r22
- 14e:	19 f0       	breq	.+6      	; 0x156 <motor_make_step+0xe>
- 150:	03 c0       	rjmp	.+6      	; 0x158 <motor_make_step+0x10>
+ 18a:	66 23       	and	r22, r22
+ 18c:	19 f0       	breq	.+6      	; 0x194 <motor_make_step+0xe>
+ 18e:	03 c0       	rjmp	.+6      	; 0x196 <motor_make_step+0x10>
 /*
  *	Toggle ports states to switch coil set - make step
  */
 void motor_make_step(uint8_t motor, uint8_t step) {
-	if (step>8) {
+	if (step>4) {
 		step = 1;
- 152:	61 e0       	ldi	r22, 0x01	; 1
- 154:	01 c0       	rjmp	.+2      	; 0x158 <motor_make_step+0x10>
+ 190:	61 e0       	ldi	r22, 0x01	; 1
+ 192:	01 c0       	rjmp	.+2      	; 0x196 <motor_make_step+0x10>
 	} else if (step<1) {
-		step = 8;
- 156:	68 e0       	ldi	r22, 0x08	; 8
+		step = 4;
+ 194:	64 e0       	ldi	r22, 0x04	; 4
 	}
 	if (motor==0) {
- 158:	88 23       	and	r24, r24
- 15a:	d1 f5       	brne	.+116    	; 0x1d0 <motor_make_step+0x88>
+ 196:	88 23       	and	r24, r24
+ 198:	d9 f4       	brne	.+54     	; 0x1d0 <motor_make_step+0x4a>
 		switch(step) {
- 15c:	65 30       	cpi	r22, 0x05	; 5
- 15e:	21 f1       	breq	.+72     	; 0x1a8 <motor_make_step+0x60>
- 160:	66 30       	cpi	r22, 0x06	; 6
- 162:	38 f4       	brcc	.+14     	; 0x172 <motor_make_step+0x2a>
- 164:	63 30       	cpi	r22, 0x03	; 3
- 166:	b1 f0       	breq	.+44     	; 0x194 <motor_make_step+0x4c>
- 168:	64 30       	cpi	r22, 0x04	; 4
- 16a:	d0 f4       	brcc	.+52     	; 0x1a0 <motor_make_step+0x58>
- 16c:	62 30       	cpi	r22, 0x02	; 2
- 16e:	39 f4       	brne	.+14     	; 0x17e <motor_make_step+0x36>
- 170:	0c c0       	rjmp	.+24     	; 0x18a <motor_make_step+0x42>
- 172:	67 30       	cpi	r22, 0x07	; 7
- 174:	19 f1       	breq	.+70     	; 0x1bc <motor_make_step+0x74>
- 176:	67 30       	cpi	r22, 0x07	; 7
- 178:	e8 f0       	brcs	.+58     	; 0x1b4 <motor_make_step+0x6c>
- 17a:	68 30       	cpi	r22, 0x08	; 8
- 17c:	29 f1       	breq	.+74     	; 0x1c8 <motor_make_step+0x80>
+ 19a:	63 30       	cpi	r22, 0x03	; 3
+ 19c:	71 f0       	breq	.+28     	; 0x1ba <motor_make_step+0x34>
+ 19e:	64 30       	cpi	r22, 0x04	; 4
+ 1a0:	99 f0       	breq	.+38     	; 0x1c8 <motor_make_step+0x42>
+ 1a2:	62 30       	cpi	r22, 0x02	; 2
+ 1a4:	31 f0       	breq	.+12     	; 0x1b2 <motor_make_step+0x2c>
 			case 1:
 				M0_STEP1;
- 17e:	92 b3       	in	r25, 0x12	; 18
- 180:	90 63       	ori	r25, 0x30	; 48
- 182:	92 bb       	out	0x12, r25	; 18
- 184:	92 b3       	in	r25, 0x12	; 18
- 186:	9f 73       	andi	r25, 0x3F	; 63
- 188:	03 c0       	rjmp	.+6      	; 0x190 <motor_make_step+0x48>
+ 1a6:	92 b3       	in	r25, 0x12	; 18
+ 1a8:	90 63       	ori	r25, 0x30	; 48
+ 1aa:	92 bb       	out	0x12, r25	; 18
+ 1ac:	92 b3       	in	r25, 0x12	; 18
+ 1ae:	9f 73       	andi	r25, 0x3F	; 63
+ 1b0:	09 c0       	rjmp	.+18     	; 0x1c4 <motor_make_step+0x3e>
 				break;
 			case 2:
 				M0_STEP2;
- 18a:	95 9a       	sbi	0x12, 5	; 18
- 18c:	92 b3       	in	r25, 0x12	; 18
- 18e:	9f 72       	andi	r25, 0x2F	; 47
- 190:	92 bb       	out	0x12, r25	; 18
+ 1b2:	95 9a       	sbi	0x12, 5	; 18
+ 1b4:	92 b3       	in	r25, 0x12	; 18
+ 1b6:	9f 72       	andi	r25, 0x2F	; 47
+ 1b8:	05 c0       	rjmp	.+10     	; 0x1c4 <motor_make_step+0x3e>
 				break;
- 192:	59 c0       	rjmp	.+178    	; 0x246 <motor_make_step+0xfe>
 			case 3:
 				M0_STEP3;
- 194:	92 b3       	in	r25, 0x12	; 18
- 196:	90 66       	ori	r25, 0x60	; 96
- 198:	92 bb       	out	0x12, r25	; 18
- 19a:	92 b3       	in	r25, 0x12	; 18
- 19c:	9f 76       	andi	r25, 0x6F	; 111
- 19e:	f8 cf       	rjmp	.-16     	; 0x190 <motor_make_step+0x48>
+ 1ba:	92 b3       	in	r25, 0x12	; 18
+ 1bc:	90 66       	ori	r25, 0x60	; 96
+ 1be:	92 bb       	out	0x12, r25	; 18
+ 1c0:	92 b3       	in	r25, 0x12	; 18
+ 1c2:	9f 76       	andi	r25, 0x6F	; 111
+ 1c4:	92 bb       	out	0x12, r25	; 18
 				break;
+ 1c6:	24 c0       	rjmp	.+72     	; 0x210 <motor_make_step+0x8a>
 			case 4:
 				M0_STEP4;
- 1a0:	96 9a       	sbi	0x12, 6	; 18
- 1a2:	92 b3       	in	r25, 0x12	; 18
- 1a4:	9f 74       	andi	r25, 0x4F	; 79
- 1a6:	f4 cf       	rjmp	.-24     	; 0x190 <motor_make_step+0x48>
-				break;
-			case 5:
-				M0_STEP5;
- 1a8:	92 b3       	in	r25, 0x12	; 18
- 1aa:	90 6c       	ori	r25, 0xC0	; 192
- 1ac:	92 bb       	out	0x12, r25	; 18
- 1ae:	92 b3       	in	r25, 0x12	; 18
- 1b0:	9f 7c       	andi	r25, 0xCF	; 207
- 1b2:	ee cf       	rjmp	.-36     	; 0x190 <motor_make_step+0x48>
-				break;
-			case 6:
-				M0_STEP6;
- 1b4:	97 9a       	sbi	0x12, 7	; 18
- 1b6:	92 b3       	in	r25, 0x12	; 18
- 1b8:	9f 78       	andi	r25, 0x8F	; 143
- 1ba:	ea cf       	rjmp	.-44     	; 0x190 <motor_make_step+0x48>
-				break;
-			case 7:
-				M0_STEP7;
- 1bc:	92 b3       	in	r25, 0x12	; 18
- 1be:	90 69       	ori	r25, 0x90	; 144
- 1c0:	92 bb       	out	0x12, r25	; 18
- 1c2:	92 b3       	in	r25, 0x12	; 18
- 1c4:	9f 79       	andi	r25, 0x9F	; 159
- 1c6:	e4 cf       	rjmp	.-56     	; 0x190 <motor_make_step+0x48>
+ 1c8:	96 9a       	sbi	0x12, 6	; 18
+ 1ca:	92 b3       	in	r25, 0x12	; 18
+ 1cc:	9f 74       	andi	r25, 0x4F	; 79
+ 1ce:	fa cf       	rjmp	.-12     	; 0x1c4 <motor_make_step+0x3e>
 				break;
 			case 8:
 				M0_STEP8;
- 1c8:	94 9a       	sbi	0x12, 4	; 18
- 1ca:	92 b3       	in	r25, 0x12	; 18
- 1cc:	9f 71       	andi	r25, 0x1F	; 31
- 1ce:	e0 cf       	rjmp	.-64     	; 0x190 <motor_make_step+0x48>
 				break;
 		}
 	} else if (motor==1) {
  1d0:	81 30       	cpi	r24, 0x01	; 1
- 1d2:	c9 f5       	brne	.+114    	; 0x246 <motor_make_step+0xfe>
+ 1d2:	f1 f4       	brne	.+60     	; 0x210 <motor_make_step+0x8a>
 		switch(step) {
- 1d4:	65 30       	cpi	r22, 0x05	; 5
- 1d6:	19 f1       	breq	.+70     	; 0x21e <motor_make_step+0xd6>
- 1d8:	66 30       	cpi	r22, 0x06	; 6
- 1da:	38 f4       	brcc	.+14     	; 0x1ea <motor_make_step+0xa2>
- 1dc:	63 30       	cpi	r22, 0x03	; 3
- 1de:	a9 f0       	breq	.+42     	; 0x20a <motor_make_step+0xc2>
- 1e0:	64 30       	cpi	r22, 0x04	; 4
- 1e2:	c8 f4       	brcc	.+50     	; 0x216 <motor_make_step+0xce>
- 1e4:	62 30       	cpi	r22, 0x02	; 2
- 1e6:	39 f4       	brne	.+14     	; 0x1f6 <motor_make_step+0xae>
- 1e8:	0c c0       	rjmp	.+24     	; 0x202 <motor_make_step+0xba>
- 1ea:	67 30       	cpi	r22, 0x07	; 7
- 1ec:	11 f1       	breq	.+68     	; 0x232 <motor_make_step+0xea>
- 1ee:	67 30       	cpi	r22, 0x07	; 7
- 1f0:	e0 f0       	brcs	.+56     	; 0x22a <motor_make_step+0xe2>
- 1f2:	68 30       	cpi	r22, 0x08	; 8
- 1f4:	21 f1       	breq	.+72     	; 0x23e <motor_make_step+0xf6>
+ 1d4:	63 30       	cpi	r22, 0x03	; 3
+ 1d6:	81 f0       	breq	.+32     	; 0x1f8 <motor_make_step+0x72>
+ 1d8:	64 30       	cpi	r22, 0x04	; 4
+ 1da:	a1 f0       	breq	.+40     	; 0x204 <motor_make_step+0x7e>
+ 1dc:	62 30       	cpi	r22, 0x02	; 2
+ 1de:	31 f0       	breq	.+12     	; 0x1ec <motor_make_step+0x66>
 			case 1:
 				M1_STEP1;
- 1f6:	95 b3       	in	r25, 0x15	; 21
- 1f8:	94 62       	ori	r25, 0x24	; 36
- 1fa:	95 bb       	out	0x15, r25	; 21
- 1fc:	95 b3       	in	r25, 0x15	; 21
- 1fe:	97 7e       	andi	r25, 0xE7	; 231
- 200:	21 c0       	rjmp	.+66     	; 0x244 <motor_make_step+0xfc>
+ 1e0:	95 b3       	in	r25, 0x15	; 21
+ 1e2:	98 61       	ori	r25, 0x18	; 24
+ 1e4:	95 bb       	out	0x15, r25	; 21
+ 1e6:	95 b3       	in	r25, 0x15	; 21
+ 1e8:	9b 7d       	andi	r25, 0xDB	; 219
+ 1ea:	11 c0       	rjmp	.+34     	; 0x20e <motor_make_step+0x88>
 				break;
 			case 2:
 				M1_STEP2;
- 202:	aa 9a       	sbi	0x15, 2	; 21
- 204:	95 b3       	in	r25, 0x15	; 21
- 206:	97 7c       	andi	r25, 0xC7	; 199
- 208:	1d c0       	rjmp	.+58     	; 0x244 <motor_make_step+0xfc>
+ 1ec:	95 b3       	in	r25, 0x15	; 21
+ 1ee:	9c 60       	ori	r25, 0x0C	; 12
+ 1f0:	95 bb       	out	0x15, r25	; 21
+ 1f2:	95 b3       	in	r25, 0x15	; 21
+ 1f4:	9f 7c       	andi	r25, 0xCF	; 207
+ 1f6:	0b c0       	rjmp	.+22     	; 0x20e <motor_make_step+0x88>
 				break;
 			case 3:
 				M1_STEP3;
- 20a:	95 b3       	in	r25, 0x15	; 21
- 20c:	94 61       	ori	r25, 0x14	; 20
- 20e:	95 bb       	out	0x15, r25	; 21
- 210:	95 b3       	in	r25, 0x15	; 21
- 212:	97 7d       	andi	r25, 0xD7	; 215
- 214:	17 c0       	rjmp	.+46     	; 0x244 <motor_make_step+0xfc>
+ 1f8:	95 b3       	in	r25, 0x15	; 21
+ 1fa:	94 62       	ori	r25, 0x24	; 36
+ 1fc:	95 bb       	out	0x15, r25	; 21
+ 1fe:	95 b3       	in	r25, 0x15	; 21
+ 200:	97 7e       	andi	r25, 0xE7	; 231
+ 202:	05 c0       	rjmp	.+10     	; 0x20e <motor_make_step+0x88>
 				break;
 			case 4:
 				M1_STEP4;
- 216:	ac 9a       	sbi	0x15, 4	; 21
- 218:	95 b3       	in	r25, 0x15	; 21
- 21a:	93 7d       	andi	r25, 0xD3	; 211
- 21c:	13 c0       	rjmp	.+38     	; 0x244 <motor_make_step+0xfc>
-				break;
-			case 5:
-				M1_STEP5;
- 21e:	95 b3       	in	r25, 0x15	; 21
- 220:	98 61       	ori	r25, 0x18	; 24
- 222:	95 bb       	out	0x15, r25	; 21
- 224:	95 b3       	in	r25, 0x15	; 21
- 226:	9b 7d       	andi	r25, 0xDB	; 219
- 228:	0d c0       	rjmp	.+26     	; 0x244 <motor_make_step+0xfc>
-				break;
-			case 6:
-				M1_STEP6;
- 22a:	ab 9a       	sbi	0x15, 3	; 21
- 22c:	95 b3       	in	r25, 0x15	; 21
- 22e:	9b 7c       	andi	r25, 0xCB	; 203
- 230:	09 c0       	rjmp	.+18     	; 0x244 <motor_make_step+0xfc>
-				break;
-			case 7:
-				M1_STEP7;
- 232:	95 b3       	in	r25, 0x15	; 21
- 234:	98 62       	ori	r25, 0x28	; 40
- 236:	95 bb       	out	0x15, r25	; 21
- 238:	95 b3       	in	r25, 0x15	; 21
- 23a:	9b 7e       	andi	r25, 0xEB	; 235
- 23c:	03 c0       	rjmp	.+6      	; 0x244 <motor_make_step+0xfc>
-				break;
+ 204:	95 b3       	in	r25, 0x15	; 21
+ 206:	90 63       	ori	r25, 0x30	; 48
+ 208:	95 bb       	out	0x15, r25	; 21
+ 20a:	95 b3       	in	r25, 0x15	; 21
+ 20c:	93 7f       	andi	r25, 0xF3	; 243
+ 20e:	95 bb       	out	0x15, r25	; 21
 			case 8:
-				M1_STEP8;
- 23e:	ad 9a       	sbi	0x15, 5	; 21
- 240:	95 b3       	in	r25, 0x15	; 21
- 242:	93 7e       	andi	r25, 0xE3	; 227
- 244:	95 bb       	out	0x15, r25	; 21
+				//M1_STEP8;
 				break;
 		}
 	}
 	motor_current_step[motor] = step;
- 246:	e8 2f       	mov	r30, r24
- 248:	f0 e0       	ldi	r31, 0x00	; 0
- 24a:	e0 5a       	subi	r30, 0xA0	; 160
- 24c:	ff 4f       	sbci	r31, 0xFF	; 255
- 24e:	60 83       	st	Z, r22
+ 210:	e8 2f       	mov	r30, r24
+ 212:	f0 e0       	ldi	r31, 0x00	; 0
+ 214:	e0 5a       	subi	r30, 0xA0	; 160
+ 216:	ff 4f       	sbci	r31, 0xFF	; 255
+ 218:	60 83       	st	Z, r22
 }
- 250:	08 95       	ret
+ 21a:	08 95       	ret
 
-00000252 <motor_move>:
+0000021c <motor_move>:
 
 /*
  * Move servo in particular directory by requesting step change
  */
 void motor_move(uint8_t motor, uint8_t dir) {
- 252:	0f 93       	push	r16
- 254:	1f 93       	push	r17
- 256:	08 2f       	mov	r16, r24
- 258:	16 2f       	mov	r17, r22
- 25a:	28 2f       	mov	r18, r24
- 25c:	30 e0       	ldi	r19, 0x00	; 0
+ 21c:	0f 93       	push	r16
+ 21e:	1f 93       	push	r17
+ 220:	08 2f       	mov	r16, r24
+ 222:	16 2f       	mov	r17, r22
+ 224:	28 2f       	mov	r18, r24
+ 226:	30 e0       	ldi	r19, 0x00	; 0
 	uint8_t next_step = (dir==1) ? motor_current_step[motor]+1 : motor_current_step[motor]-1;		// 0-8
- 25e:	61 30       	cpi	r22, 0x01	; 1
- 260:	31 f4       	brne	.+12     	; 0x26e <motor_move+0x1c>
- 262:	20 5a       	subi	r18, 0xA0	; 160
- 264:	3f 4f       	sbci	r19, 0xFF	; 255
- 266:	f9 01       	movw	r30, r18
- 268:	60 81       	ld	r22, Z
- 26a:	6f 5f       	subi	r22, 0xFF	; 255
- 26c:	05 c0       	rjmp	.+10     	; 0x278 <motor_move+0x26>
- 26e:	20 5a       	subi	r18, 0xA0	; 160
- 270:	3f 4f       	sbci	r19, 0xFF	; 255
- 272:	f9 01       	movw	r30, r18
- 274:	60 81       	ld	r22, Z
- 276:	61 50       	subi	r22, 0x01	; 1
+ 228:	61 30       	cpi	r22, 0x01	; 1
+ 22a:	31 f4       	brne	.+12     	; 0x238 <motor_move+0x1c>
+ 22c:	20 5a       	subi	r18, 0xA0	; 160
+ 22e:	3f 4f       	sbci	r19, 0xFF	; 255
+ 230:	f9 01       	movw	r30, r18
+ 232:	60 81       	ld	r22, Z
+ 234:	6f 5f       	subi	r22, 0xFF	; 255
+ 236:	05 c0       	rjmp	.+10     	; 0x242 <motor_move+0x26>
+ 238:	20 5a       	subi	r18, 0xA0	; 160
+ 23a:	3f 4f       	sbci	r19, 0xFF	; 255
+ 23c:	f9 01       	movw	r30, r18
+ 23e:	60 81       	ld	r22, Z
+ 240:	61 50       	subi	r22, 0x01	; 1
 	motor_make_step(motor, next_step);
- 278:	80 2f       	mov	r24, r16
- 27a:	66 df       	rcall	.-308    	; 0x148 <motor_make_step>
+ 242:	80 2f       	mov	r24, r16
+ 244:	a0 df       	rcall	.-192    	; 0x186 <motor_make_step>
 	if (motor==0) {
- 27c:	00 23       	and	r16, r16
- 27e:	51 f5       	brne	.+84     	; 0x2d4 <motor_move+0x82>
+ 246:	00 23       	and	r16, r16
+ 248:	51 f5       	brne	.+84     	; 0x29e <motor_move+0x82>
 		if (dir==0 && motor_pos[0]==M0_POS_MIN) {
- 280:	11 23       	and	r17, r17
- 282:	49 f4       	brne	.+18     	; 0x296 <motor_move+0x44>
- 284:	80 91 62 00 	lds	r24, 0x0062
- 288:	90 91 63 00 	lds	r25, 0x0063
- 28c:	00 97       	sbiw	r24, 0x00	; 0
- 28e:	c1 f4       	brne	.+48     	; 0x2c0 <motor_move+0x6e>
+ 24a:	11 23       	and	r17, r17
+ 24c:	49 f4       	brne	.+18     	; 0x260 <motor_move+0x44>
+ 24e:	80 91 62 00 	lds	r24, 0x0062
+ 252:	90 91 63 00 	lds	r25, 0x0063
+ 256:	00 97       	sbiw	r24, 0x00	; 0
+ 258:	c1 f4       	brne	.+48     	; 0x28a <motor_move+0x6e>
 			motor_pos[0] = M0_POS_MAX;
- 290:	80 e9       	ldi	r24, 0x90	; 144
- 292:	91 e0       	ldi	r25, 0x01	; 1
- 294:	1a c0       	rjmp	.+52     	; 0x2ca <motor_move+0x78>
+ 25a:	80 e9       	ldi	r24, 0x90	; 144
+ 25c:	91 e0       	ldi	r25, 0x01	; 1
+ 25e:	1a c0       	rjmp	.+52     	; 0x294 <motor_move+0x78>
 		} else if (dir==1 && motor_pos[0]==M0_POS_MAX) {
- 296:	11 30       	cpi	r17, 0x01	; 1
- 298:	99 f4       	brne	.+38     	; 0x2c0 <motor_move+0x6e>
- 29a:	80 91 62 00 	lds	r24, 0x0062
- 29e:	90 91 63 00 	lds	r25, 0x0063
- 2a2:	f1 e0       	ldi	r31, 0x01	; 1
- 2a4:	80 39       	cpi	r24, 0x90	; 144
- 2a6:	9f 07       	cpc	r25, r31
- 2a8:	29 f4       	brne	.+10     	; 0x2b4 <motor_move+0x62>
+ 260:	11 30       	cpi	r17, 0x01	; 1
+ 262:	99 f4       	brne	.+38     	; 0x28a <motor_move+0x6e>
+ 264:	80 91 62 00 	lds	r24, 0x0062
+ 268:	90 91 63 00 	lds	r25, 0x0063
+ 26c:	f1 e0       	ldi	r31, 0x01	; 1
+ 26e:	80 39       	cpi	r24, 0x90	; 144
+ 270:	9f 07       	cpc	r25, r31
+ 272:	29 f4       	brne	.+10     	; 0x27e <motor_move+0x62>
 			motor_pos[0] = M0_POS_MIN;
- 2aa:	10 92 63 00 	sts	0x0063, r1
- 2ae:	10 92 62 00 	sts	0x0062, r1
- 2b2:	25 c0       	rjmp	.+74     	; 0x2fe <motor_move+0xac>
+ 274:	10 92 63 00 	sts	0x0063, r1
+ 278:	10 92 62 00 	sts	0x0062, r1
+ 27c:	25 c0       	rjmp	.+74     	; 0x2c8 <motor_move+0xac>
 		} else {
 			motor_pos[0] = (dir==1) ? motor_pos[0]+1 : motor_pos[0]-1;
- 2b4:	80 91 62 00 	lds	r24, 0x0062
- 2b8:	90 91 63 00 	lds	r25, 0x0063
- 2bc:	01 96       	adiw	r24, 0x01	; 1
- 2be:	05 c0       	rjmp	.+10     	; 0x2ca <motor_move+0x78>
- 2c0:	80 91 62 00 	lds	r24, 0x0062
- 2c4:	90 91 63 00 	lds	r25, 0x0063
- 2c8:	01 97       	sbiw	r24, 0x01	; 1
- 2ca:	90 93 63 00 	sts	0x0063, r25
- 2ce:	80 93 62 00 	sts	0x0062, r24
- 2d2:	15 c0       	rjmp	.+42     	; 0x2fe <motor_move+0xac>
+ 27e:	80 91 62 00 	lds	r24, 0x0062
+ 282:	90 91 63 00 	lds	r25, 0x0063
+ 286:	01 96       	adiw	r24, 0x01	; 1
+ 288:	05 c0       	rjmp	.+10     	; 0x294 <motor_move+0x78>
+ 28a:	80 91 62 00 	lds	r24, 0x0062
+ 28e:	90 91 63 00 	lds	r25, 0x0063
+ 292:	01 97       	sbiw	r24, 0x01	; 1
+ 294:	90 93 63 00 	sts	0x0063, r25
+ 298:	80 93 62 00 	sts	0x0062, r24
+ 29c:	15 c0       	rjmp	.+42     	; 0x2c8 <motor_move+0xac>
 		}
 	} else if (motor==1) {
- 2d4:	01 30       	cpi	r16, 0x01	; 1
- 2d6:	99 f4       	brne	.+38     	; 0x2fe <motor_move+0xac>
+ 29e:	01 30       	cpi	r16, 0x01	; 1
+ 2a0:	99 f4       	brne	.+38     	; 0x2c8 <motor_move+0xac>
 		if (dir==0) {
- 2d8:	11 23       	and	r17, r17
- 2da:	31 f4       	brne	.+12     	; 0x2e8 <motor_move+0x96>
+ 2a2:	11 23       	and	r17, r17
+ 2a4:	31 f4       	brne	.+12     	; 0x2b2 <motor_move+0x96>
 			motor_pos[1]--;
- 2dc:	80 91 64 00 	lds	r24, 0x0064
- 2e0:	90 91 65 00 	lds	r25, 0x0065
- 2e4:	01 97       	sbiw	r24, 0x01	; 1
- 2e6:	07 c0       	rjmp	.+14     	; 0x2f6 <motor_move+0xa4>
+ 2a6:	80 91 64 00 	lds	r24, 0x0064
+ 2aa:	90 91 65 00 	lds	r25, 0x0065
+ 2ae:	01 97       	sbiw	r24, 0x01	; 1
+ 2b0:	07 c0       	rjmp	.+14     	; 0x2c0 <motor_move+0xa4>
 		} else if (dir==1) {
- 2e8:	11 30       	cpi	r17, 0x01	; 1
- 2ea:	49 f4       	brne	.+18     	; 0x2fe <motor_move+0xac>
+ 2b2:	11 30       	cpi	r17, 0x01	; 1
+ 2b4:	49 f4       	brne	.+18     	; 0x2c8 <motor_move+0xac>
 			motor_pos[1]++;
- 2ec:	80 91 64 00 	lds	r24, 0x0064
- 2f0:	90 91 65 00 	lds	r25, 0x0065
- 2f4:	01 96       	adiw	r24, 0x01	; 1
- 2f6:	90 93 65 00 	sts	0x0065, r25
- 2fa:	80 93 64 00 	sts	0x0064, r24
+ 2b6:	80 91 64 00 	lds	r24, 0x0064
+ 2ba:	90 91 65 00 	lds	r25, 0x0065
+ 2be:	01 96       	adiw	r24, 0x01	; 1
+ 2c0:	90 93 65 00 	sts	0x0065, r25
+ 2c4:	80 93 64 00 	sts	0x0064, r24
 		}
 	}
- 2fe:	1f 91       	pop	r17
- 300:	0f 91       	pop	r16
- 302:	08 95       	ret
+ 2c8:	1f 91       	pop	r17
+ 2ca:	0f 91       	pop	r16
+ 2cc:	08 95       	ret
 
-00000304 <__vector_9>:
+000002ce <__vector_9>:
 }
 
 /*
  * Timer0 interrupt handler
  */
 ISR(TIMER0_OVF_vect) {
- 304:	1f 92       	push	r1
- 306:	0f 92       	push	r0
- 308:	0f b6       	in	r0, 0x3f	; 63
- 30a:	0f 92       	push	r0
- 30c:	11 24       	eor	r1, r1
- 30e:	2f 93       	push	r18
- 310:	3f 93       	push	r19
- 312:	4f 93       	push	r20
- 314:	5f 93       	push	r21
- 316:	6f 93       	push	r22
- 318:	7f 93       	push	r23
- 31a:	8f 93       	push	r24
- 31c:	9f 93       	push	r25
- 31e:	af 93       	push	r26
- 320:	bf 93       	push	r27
- 322:	ef 93       	push	r30
- 324:	ff 93       	push	r31
+ 2ce:	1f 92       	push	r1
+ 2d0:	0f 92       	push	r0
+ 2d2:	0f b6       	in	r0, 0x3f	; 63
+ 2d4:	0f 92       	push	r0
+ 2d6:	11 24       	eor	r1, r1
+ 2d8:	2f 93       	push	r18
+ 2da:	3f 93       	push	r19
+ 2dc:	4f 93       	push	r20
+ 2de:	5f 93       	push	r21
+ 2e0:	6f 93       	push	r22
+ 2e2:	7f 93       	push	r23
+ 2e4:	8f 93       	push	r24
+ 2e6:	9f 93       	push	r25
+ 2e8:	af 93       	push	r26
+ 2ea:	bf 93       	push	r27
+ 2ec:	ef 93       	push	r30
+ 2ee:	ff 93       	push	r31
 	if (stepper_flag[0] > (255 - motor_speed[0])) {
- 326:	20 91 76 00 	lds	r18, 0x0076
- 32a:	40 91 66 00 	lds	r20, 0x0066
- 32e:	30 e0       	ldi	r19, 0x00	; 0
- 330:	8f ef       	ldi	r24, 0xFF	; 255
- 332:	90 e0       	ldi	r25, 0x00	; 0
- 334:	84 1b       	sub	r24, r20
- 336:	91 09       	sbc	r25, r1
- 338:	82 17       	cp	r24, r18
- 33a:	93 07       	cpc	r25, r19
- 33c:	1c f4       	brge	.+6      	; 0x344 <__vector_9+0x40>
+ 2f0:	20 91 77 00 	lds	r18, 0x0077
+ 2f4:	40 91 67 00 	lds	r20, 0x0067
+ 2f8:	30 e0       	ldi	r19, 0x00	; 0
+ 2fa:	8f ef       	ldi	r24, 0xFF	; 255
+ 2fc:	90 e0       	ldi	r25, 0x00	; 0
+ 2fe:	84 1b       	sub	r24, r20
+ 300:	91 09       	sbc	r25, r1
+ 302:	82 17       	cp	r24, r18
+ 304:	93 07       	cpc	r25, r19
+ 306:	1c f4       	brge	.+6      	; 0x30e <__vector_9+0x40>
 		stepper_flag[0] = 0;
- 33e:	10 92 76 00 	sts	0x0076, r1
- 342:	05 c0       	rjmp	.+10     	; 0x34e <__vector_9+0x4a>
+ 308:	10 92 77 00 	sts	0x0077, r1
+ 30c:	05 c0       	rjmp	.+10     	; 0x318 <__vector_9+0x4a>
 	} else {
 		stepper_flag[0]++;
- 344:	80 91 76 00 	lds	r24, 0x0076
- 348:	8f 5f       	subi	r24, 0xFF	; 255
- 34a:	80 93 76 00 	sts	0x0076, r24
+ 30e:	80 91 77 00 	lds	r24, 0x0077
+ 312:	8f 5f       	subi	r24, 0xFF	; 255
+ 314:	80 93 77 00 	sts	0x0077, r24
 	}
 	if (stepper_flag[1] > (255 - motor_speed[1])) {
- 34e:	20 91 77 00 	lds	r18, 0x0077
- 352:	40 91 67 00 	lds	r20, 0x0067
- 356:	30 e0       	ldi	r19, 0x00	; 0
- 358:	8f ef       	ldi	r24, 0xFF	; 255
- 35a:	90 e0       	ldi	r25, 0x00	; 0
- 35c:	84 1b       	sub	r24, r20
- 35e:	91 09       	sbc	r25, r1
- 360:	82 17       	cp	r24, r18
- 362:	93 07       	cpc	r25, r19
- 364:	1c f4       	brge	.+6      	; 0x36c <__vector_9+0x68>
+ 318:	20 91 78 00 	lds	r18, 0x0078
+ 31c:	40 91 68 00 	lds	r20, 0x0068
+ 320:	30 e0       	ldi	r19, 0x00	; 0
+ 322:	8f ef       	ldi	r24, 0xFF	; 255
+ 324:	90 e0       	ldi	r25, 0x00	; 0
+ 326:	84 1b       	sub	r24, r20
+ 328:	91 09       	sbc	r25, r1
+ 32a:	82 17       	cp	r24, r18
+ 32c:	93 07       	cpc	r25, r19
+ 32e:	1c f4       	brge	.+6      	; 0x336 <__vector_9+0x68>
 		stepper_flag[1] = 0;
- 366:	10 92 77 00 	sts	0x0077, r1
- 36a:	05 c0       	rjmp	.+10     	; 0x376 <__vector_9+0x72>
+ 330:	10 92 78 00 	sts	0x0078, r1
+ 334:	05 c0       	rjmp	.+10     	; 0x340 <__vector_9+0x72>
 	} else {
 		stepper_flag[1]++;
- 36c:	80 91 77 00 	lds	r24, 0x0077
- 370:	8f 5f       	subi	r24, 0xFF	; 255
- 372:	80 93 77 00 	sts	0x0077, r24
+ 336:	80 91 78 00 	lds	r24, 0x0078
+ 33a:	8f 5f       	subi	r24, 0xFF	; 255
+ 33c:	80 93 78 00 	sts	0x0078, r24
 	}
 
 	if (stepper_flag[0] == 0) {
- 376:	80 91 76 00 	lds	r24, 0x0076
- 37a:	88 23       	and	r24, r24
- 37c:	11 f4       	brne	.+4      	; 0x382 <__vector_9+0x7e>
-		if (1 || btn_state[0]==BTN_L) {
-			motor_move(0,0);
- 37e:	60 e0       	ldi	r22, 0x00	; 0
- 380:	68 df       	rcall	.-304    	; 0x252 <motor_move>
+ 340:	80 91 77 00 	lds	r24, 0x0077
+			//motor_move(0,0);
 		} else if (btn_state[0]==BTN_R) {
-			motor_move(0,1);
+			//motor_move(0,1);
 		}
 	}
 	if (stepper_flag[1] == 0) {
- 382:	80 91 77 00 	lds	r24, 0x0077
- 386:	88 23       	and	r24, r24
- 388:	19 f4       	brne	.+6      	; 0x390 <__vector_9+0x8c>
+ 344:	80 91 78 00 	lds	r24, 0x0078
+ 348:	88 23       	and	r24, r24
+ 34a:	19 f4       	brne	.+6      	; 0x352 <__vector_9+0x84>
 		if (1 || btn_state[3]==BTN_L) {
 			motor_move(1,0);
- 38a:	81 e0       	ldi	r24, 0x01	; 1
- 38c:	60 e0       	ldi	r22, 0x00	; 0
- 38e:	61 df       	rcall	.-318    	; 0x252 <motor_move>
+ 34c:	81 e0       	ldi	r24, 0x01	; 1
+ 34e:	60 e0       	ldi	r22, 0x00	; 0
+ 350:	65 df       	rcall	.-310    	; 0x21c <motor_move>
 		} else if (btn_state[3]==BTN_R) {
-			motor_move(1,1);
+			//motor_move(1,1);
 		}
 	}
 }
- 390:	ff 91       	pop	r31
- 392:	ef 91       	pop	r30
- 394:	bf 91       	pop	r27
- 396:	af 91       	pop	r26
- 398:	9f 91       	pop	r25
- 39a:	8f 91       	pop	r24
- 39c:	7f 91       	pop	r23
- 39e:	6f 91       	pop	r22
- 3a0:	5f 91       	pop	r21
- 3a2:	4f 91       	pop	r20
- 3a4:	3f 91       	pop	r19
- 3a6:	2f 91       	pop	r18
- 3a8:	0f 90       	pop	r0
- 3aa:	0f be       	out	0x3f, r0	; 63
- 3ac:	0f 90       	pop	r0
- 3ae:	1f 90       	pop	r1
- 3b0:	18 95       	reti
+ 352:	ff 91       	pop	r31
+ 354:	ef 91       	pop	r30
+ 356:	bf 91       	pop	r27
+ 358:	af 91       	pop	r26
+ 35a:	9f 91       	pop	r25
+ 35c:	8f 91       	pop	r24
+ 35e:	7f 91       	pop	r23
+ 360:	6f 91       	pop	r22
+ 362:	5f 91       	pop	r21
+ 364:	4f 91       	pop	r20
+ 366:	3f 91       	pop	r19
+ 368:	2f 91       	pop	r18
+ 36a:	0f 90       	pop	r0
+ 36c:	0f be       	out	0x3f, r0	; 63
+ 36e:	0f 90       	pop	r0
+ 370:	1f 90       	pop	r1
+ 372:	18 95       	reti
 
-000003b2 <_exit>:
- 3b2:	f8 94       	cli
+00000374 <_exit>:
+ 374:	f8 94       	cli
 
-000003b4 <__stop_program>:
- 3b4:	ff cf       	rjmp	.-2      	; 0x3b4 <__stop_program>
+00000376 <__stop_program>:
+ 376:	ff cf       	rjmp	.-2      	; 0x376 <__stop_program>

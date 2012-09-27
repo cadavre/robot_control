@@ -36,33 +36,29 @@
 #define M0_STEP7				PORTD |= M0_A1|M0_B2; PORTD &= ~(M0_A2|M0_B1)
 #define M0_STEP8				PORTD |= M0_A1; PORTD &= ~(M0_A2|M0_B1|M0_B2)
 
-/*#define M1_STEP1				PORTC |= M1_A1|M1_B1; PORTC &= ~(M1_A2|M1_B2)
-#define M1_STEP2				PORTC |= M1_B1; PORTC &= ~(M1_A1|M1_A2|M1_B2)
-#define M1_STEP3				PORTC |= M1_A2|M1_B1; PORTC &= ~(M1_A1|M1_B2)
-#define M1_STEP4				PORTC |= M1_A2; PORTC &= ~(M1_A1|M1_B1|M1_B2)
-#define M1_STEP5				PORTC |= M1_A2|M1_B2; PORTC &= ~(M1_A1|M1_B1)
-#define M1_STEP6				PORTC |= M1_B2; PORTC &= ~(M1_A1|M1_A2|M1_B1)
-#define M1_STEP7				PORTC |= M1_A1|M1_B2; PORTC &= ~(M1_A2|M1_B1)
-#define M1_STEP8				PORTC |= M1_A1; PORTC &= ~(M1_A2|M1_B1|M1_B2)*/
+#define M1_STEP1				PORTC |= M1_BP|M1_AM; PORTC &= ~(M1_AP|M1_BM)
+#define M1_STEP2				PORTC |= M1_AP|M1_BP; PORTC &= ~(M1_AM|M1_BM)
+#define M1_STEP3				PORTC |= M1_AP|M1_BM; PORTC &= ~(M1_AM|M1_BP)
+#define M1_STEP4				PORTC |= M1_AM|M1_BM; PORTC &= ~(M1_AP|M1_BP)
 
-#define M1_STEP1				PORTC |= M1_AP|M1_BM; PORTC &= ~(M1_AM|M1_BP)
+/*#define M1_STEP1				PORTC |= M1_AP|M1_BM; PORTC &= ~(M1_AM|M1_BP)
 #define M1_STEP2				PORTC |= M1_AP; PORTC &= ~(M1_AM|M1_BP|M1_BM)
 #define M1_STEP3				PORTC |= M1_AP|M1_AM; PORTC &= ~(M1_BP|M1_BM)
 #define M1_STEP4				PORTC |= M1_AM; PORTC &= ~(M1_AP|M1_BP|M1_BM)
 #define M1_STEP5				PORTC |= M1_AM|M1_BP; PORTC &= ~(M1_AP|M1_BM)
 #define M1_STEP6				PORTC |= M1_BP; PORTC &= ~(M1_AP|M1_AM|M1_BM)
 #define M1_STEP7				PORTC |= M1_BP|M1_BM; PORTC &= ~(M1_AP|M1_AM)
-#define M1_STEP8				PORTC |= M1_BM; PORTC &= ~(M1_AP|M1_AM|M1_BP)
+#define M1_STEP8				PORTC |= M1_BM; PORTC &= ~(M1_AP|M1_AM|M1_BP)*/
 
 // krokowe: stany prze³¹czeñ kroków
 #define M0_SWITCH_FLAG			100
 #define M1_SWITCH_FLAG			200
 
 // krokowe: ograniczenie prêdkoœci
-#define M0_SPD_L				15
+#define M0_SPD_L				0
 #define M0_SPD_H				155
-#define M1_SPD_L				5
-#define M1_SPD_H				100
+#define M1_SPD_L				0
+#define M1_SPD_H				155
 
 // krokowe: ratio prze³o¿eñ na jednostkê
 #define M0_RATIO				0.1
