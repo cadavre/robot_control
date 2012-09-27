@@ -10,13 +10,6 @@
 #include "atmega_slave_conf.h"
 
 /*
- * Variables for servo controls
- */
-volatile uint16_t servo_pos_raw[4] = {SERVO_DEFAULT,SERVO_DEFAULT,SERVO_DEFAULT,SERVO_DEFAULT};
-volatile uint8_t servo_speed = 0;
-volatile uint8_t current_servo = 0;
-
-/*
  * Variables for stepping motors controls
  */
 volatile uint8_t motor_current_step[2] = {1,1};		// 1-8
@@ -36,20 +29,8 @@ volatile uint8_t stepper_flag[2] = {0,0};
 /*
  * Prototypes
  */
-void toggle_servo_signal(uint8_t servo);
-void servo_move(uint8_t servo, uint8_t dir);
-void servo_to_deg(uint8_t servo, uint8_t deg);
-void servo_to_raw(uint8_t servo, uint16_t raw);
 void motor_make_step(uint8_t motor, uint8_t dir);
 void motor_move(uint8_t motor, uint8_t dir);
-
-/*
- * Initialize ports for servo signal outputs
- */
-void servo_ports_init(void) {
-	DDRD |= SERVOS;
-	PORTD &= ~(SERVOS);
-}
 
 /*
  * Initialize ports for stepping motors outputs
@@ -85,53 +66,11 @@ void SPI_init(void) {
 }
 
 /*
- * Initialize Timer2 for 5ms intervals
- * - 5ms x 4 servos = 20ms = control signal interval
- */
-void Timer2_init(void) {
-	TCCR2 |= (1<<WGM21);			// CTC
-	TCCR2 |= (1<<CS21)|(1<<CS22);	// prescaler 256
-	OCR2 = 0x93;					// ~4.7ms
-	TIMSK |= (1<<OCIE2);			// IRQ
-}
-
-/*
- * Initialize Timer1 for software PWM for servos
- * - 2,5ms with 20000 ticks
- */
-void Timer1_init(void) {
-	TCCR1B |= (1<<WGM12);			// CTC
-	TIMSK |= (1<<OCIE1A);			// IRQ
-}
-
-/*
  * Initialize Timer0 for switching steps on stepping motors
  */
 void Timer0_init(void) {
 	TCCR0 |= (1<<CS00);							// no prescaler
 	TIMSK |= (1<<TOIE0);						// overflow IRQ
-}
-
-/*
- * Start counting on Timer1
- */
-void Timer1_start(void) {
-	OCR1A = servo_pos_raw[current_servo];
-	TCCR1B |= (1<<CS10);
-}
-
-/*
- * Stop counting on Timer1
- */
-void Timer1_stop(void) {
-	TCCR1B &= ~(1<<CS10);
-	TCNT1 = 0;
-	TIFR &= ~(1<<OCF1A);
-	if(current_servo<4) {
-		current_servo++;
-	} else {
-		current_servo = 0;
-	}
 }
 
 /*
@@ -146,27 +85,6 @@ ISR(SPI_STC_vect) {
 		j = 0;
 	}
 	SPDR = drive_state[j];
-}
-
-/*
- * Timer2 interrupt handler
- * - switch servo signal on
- * - turn on Timer1
- */
-ISR(TIMER2_COMP_vect) {
-	toggle_servo_signal(current_servo);
-	btn_get_flag++;
-	Timer1_start();
-}
-
-/*
- * Timer1 interrupt handler
- * - switch servo signal off
- * - turn off Timer1
- */
-ISR(TIMER1_COMPA_vect) {
-	toggle_servo_signal(current_servo);
-	Timer1_stop();
 }
 
 /*
@@ -217,10 +135,7 @@ ISR(ADC_vect) {
 /************************************************* MAIN *************************************************/
 int main(void)
 {
-	servo_ports_init();
 	motor_ports_init();
-	Timer2_init();
-	Timer1_init();
 	Timer0_init();
 	SPI_init();
 	ADC_init();
@@ -229,7 +144,7 @@ int main(void)
 	{
 		if (btn_get_flag==BTN_GET_ON) {
 
-			/* buttons for servos */
+			/* buttons for servos
 			if (btn_state[4]==BTN_L) {
 				servo_move(0,0);
 				servo_move(1,1);
@@ -243,7 +158,7 @@ int main(void)
 			} else if (btn_state[2]==BTN_R) {
 				servo_move(2,1);
 				servo_move(3,1);
-			}
+			}*/
 
 			// refresh current drives positions
 			drive_state[0] = motor_pos[0] * M0_RATIO;
@@ -277,53 +192,6 @@ int main(void)
 	}
 }
 /********************************************** END OF MAIN **********************************************/
-
-/*
- * Servo signal toggler for software PWM
- */
-void toggle_servo_signal(uint8_t servo) {
-	switch(servo) {
-		case 0:
-			PORTD ^= SERVO0_PIN;
-			break;
-		case 1:
-			PORTD ^= SERVO1_PIN;
-			break;
-		case 2:
-			PORTD ^= SERVO2_PIN;
-			break;
-		case 3:
-			PORTD ^= SERVO3_PIN;
-			break;
-	}
-}
-
-/*
- * Changes software PWM overflow controlling servo position, by move
- */
-void servo_move(uint8_t servo, uint8_t dir) {
-	if (dir==1 && servo_pos_raw[servo]<SERVO_MAX) {
-		servo_pos_raw[servo] += (servo_speed + SERVO_MIN_SPEED);
-	} else if (dir==0 && servo_pos_raw[servo]>SERVO_MIN) {
-		servo_pos_raw[servo] -= (servo_speed + SERVO_MIN_SPEED);
-	}
-}
-
-/*
- * Changes software PWM overflow controlling servo position, by target deg
- */
-void servo_to_deg(uint8_t servo, uint8_t deg) {
-	if (deg>=SERVO_MIN_DEG && deg<=SERVO_MAX_DEG) {
-		servo_pos_raw[servo] = SERVO_MIN + (SERVO_STEPS_PER_DEG*deg);
-	}
-}
-
-/*
- * Changes software PWM overflow controlling servo position, by target raw
- */
-void servo_to_raw(uint8_t servo, uint16_t raw) {
-	servo_pos_raw[servo] = SERVO_MIN + raw;
-}
 
 /*
  *	Toggle ports states to switch coil set - make step
@@ -398,7 +266,7 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 void motor_move(uint8_t motor, uint8_t dir) {
 	uint8_t next_step = (dir==1) ? motor_current_step[motor]+1 : motor_current_step[motor]-1;		// 0-8
 	motor_make_step(motor, next_step);
-	if (motor==0) { // position of infinite rotation motor
+	if (motor==0) {
 		if (dir==0 && motor_pos[0]==M0_POS_MIN) {
 			motor_pos[0] = M0_POS_MAX;
 		} else if (dir==1 && motor_pos[0]==M0_POS_MAX) {
@@ -406,8 +274,7 @@ void motor_move(uint8_t motor, uint8_t dir) {
 		} else {
 			motor_pos[0] = (dir==1) ? motor_pos[0]+1 : motor_pos[0]-1;
 		}
-	} else if (motor==1) { // position of finite transitional motor
-		//TODO pozycja silnika krokowego posuwu
+	} else if (motor==1) {
 		if (dir==0) {
 			motor_pos[1]--;
 		} else if (dir==1) {
