@@ -24,21 +24,9 @@ volatile uint8_t j = 0;
 /*
  * Prototypes
  */
-void map_btn_state(uint8_t btn_meas);
 void lcd_drive(int value, char *str);
 void lcd_refresh(void);
 void USART_send_report(void);
-
-/*
- * Analog-Digital-Converter interface initialization
- */
-void ADC_init(void) {
-	ADMUX |= (1<<REFS0)|(1<<REFS1);				// 2,56V
-	ADMUX |= (1<<ADLAR);						// ADCH only
-	ADCSRA |= (1<<ADIE);						// ADC interrupt flag
-	ADCSRA |= (1<<ADEN)|(1<<ADPS0)|(1<<ADPS2);	// prescaler 32
-	ADCSRA |= (1<<ADSC);						// initial measurement
-}
 
 /*
  * Timer2 initialization
@@ -83,21 +71,6 @@ uint8_t SPI_transfer(uint8_t byte) {
 }
 
 /*
- * ADC interrupt handle
- * - Reading button states
- */
-ISR(ADC_vect) {
-	map_btn_state(ADCH);
-	ADMUX = (ADMUX & 0xE0) + i;
-	if(i<4) {
-		i++;
-	} else {
-		i = 0;
-	}
-	ADCSRA |= (1<<ADSC);	// start next measurement
-}
-
-/*
  * Timer2 interrupt handle
  * - Makes SPI connection and transfers data
  */
@@ -105,7 +78,7 @@ ISR(TIMER2_COMP_vect) {
 	SPI_SS_low();
 	drive_state[j] = SPI_transfer(btn_state[j]);
 	SPI_SS_high();
-	if(j<5) {
+	if(j<5) { // send 6 bytes
 		j++;
 	} else {
 		j = 0;
@@ -117,15 +90,15 @@ ISR(TIMER2_COMP_vect) {
 int main(void)
 {
 	Timer2_init();
-	ADC_init();
 	SPI_init();
 	USART_init(__UBRR);
-	OSCCAL = 152;
+	OSCCAL = 152; // oscilator calibration for USART communication
 	sei();
 	lcd_init();
 	lcd_defchar(0x80, deg_sign);
 	while(1)
 	{
+		// TODO obs³uga klawiszy i przypisanie ich do rejestru stanu przycisków
 		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
 			lcd_refresh();
 		}
@@ -139,29 +112,6 @@ int main(void)
 	return 0;
 }
 /********************************************** END OF MAIN **********************************************/
-
-/*
- * Button mapping ADC measurement to btn_state
- */
-void map_btn_state(uint8_t btn_meas) {
-	//if ( i != 4) {
-		if ( (btn_meas > 100) && (btn_meas < 130) ) {
-			btn_state[i] = BTN_L;
-		} else if ( (btn_meas > 150) && (btn_meas < 210) ) {
-			btn_state[i] = BTN_R;
-		} else {
-			btn_state[i] = BTN_OFF;
-		}
-	/*} else if ( i == 4 ) {
-		if ( (btn_meas > 100) && (btn_meas < 130) ) {
-			btn_state[4] = BTN_ON;
-		} else if ( (btn_meas > 150) && (btn_meas < 210) ) {
-			btn_state[5] = BTN_ON;
-		} else {
-			btn_state[4] = btn_state[5] = BTN_OFF;
-		}
-	}*/
-}
 
 /*
  * Refresh LCD display
