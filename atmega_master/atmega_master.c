@@ -14,11 +14,10 @@
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
 volatile uint8_t drive_state[6] = {0,0,0,0,0,0};
 
-uint8_t deg_sign[] = {6,9,9,6,0,0,0,0};
+uint8_t deg_sign[] = {6,9,9,6,0,0,0,0}; // degree sign definition for LCD
 volatile char btn_sign;
 
 volatile uint8_t refresh_flag = 0;
-volatile uint8_t i = 0;
 volatile uint8_t j = 0;
 
 /*
