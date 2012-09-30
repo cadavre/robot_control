@@ -14,10 +14,6 @@
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
 volatile uint8_t memory_state[6] = {0,0,0,0,0,0};
 
-volatile uint16_t iteration = 0;				// iteration number - one round is 8 (90deg=2, 45deg=1)
-volatile uint8_t dimensions[2] = {0,0};			// dm, max 25.5m
-volatile uint8_t total_dist = 0;				// m, max 255m
-
 uint8_t separator_sign[] = {4,4,4,4,4,4,4,4};			// separator sign for lcd
 
 volatile uint8_t refresh_flag = 0;
@@ -32,6 +28,8 @@ void lcd_drive(int value, char *str);
 void lcd_refresh(void);
 void lcd_welcome(void);
 void USART_send_report(void);
+// void lcd_reset_info(void);
+void lcd_debug(void);
 
 /*
  * Timer2 initialization
@@ -149,11 +147,17 @@ int main(void)
 			}
 		}
 
-		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
-			// lcd_refresh(); // todo dodaæ if sprawdzaj¹cy czy jest w trybie odkurzania
+		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 && memory_state[0] == STATE_RUNNING ) {
+			lcd_refresh();
+		} else if ( memory_state[0] == STATE_RESETTING ) {
+			// lcd_reset_info();
+			lcd_debug();
+		} else {
+			// lcd_welcome();
+			lcd_debug();
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
-			USART_send_report();
+			// USART_send_report();
 		}
 		if (refresh_flag==255) {
 			refresh_flag = 0;
@@ -172,6 +176,30 @@ void lcd_welcome(void) {
 	lcd_str("Mechatronika");
 	lcd_locate(1,3);
 	lcd_str("AiR, gr.IV");
+}
+
+void lcd_debug(void) {
+	lcd_cls();
+	lcd_locate(0,0);
+	lcd_int(btn_state[0] == 1);
+	lcd_locate(0,1);
+	lcd_int(btn_state[1] == 1);
+	lcd_locate(0,2);
+	lcd_int(btn_state[2] == 1);
+	lcd_locate(0,3);
+	lcd_int(btn_state[3] == 1);
+	lcd_locate(0,4);
+	lcd_int(btn_state[4] == 1);
+	lcd_locate(0,5);
+	lcd_int(btn_state[5] == BTN_L || btn_state[5] == BTN_R);
+	lcd_locate(0,7);
+	lcd_str("ST");
+	lcd_locate(0,9);
+	lcd_int(memory_state[0]);
+	lcd_locate(0,11);
+	lcd_str("MO");
+	lcd_locate(0,13);
+	lcd_int(memory_state[1]);
 }
 
 /*
@@ -201,12 +229,12 @@ void lcd_refresh(void) {
 	lcd_locate(1,0);
 	lcd_str("IT");
 	lcd_locate(1,2);
-	lcd_int(iteration); // number of iteration
+	lcd_int(memory_state[3]); // number of iteration
 	// DiSTance
 	lcd_locate(1,6);
 	lcd_str("LN");
 	lcd_locate(1,8);
-	lcd_int(total_dist/100); // total distance in meters
+	lcd_int(memory_state[4]); // total distance in meters
 	// SPD
 	lcd_locate(0,13);
 	lcd_str("SPD");

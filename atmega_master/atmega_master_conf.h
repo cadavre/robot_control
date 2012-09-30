@@ -43,4 +43,9 @@
 #define STATE_RUNNING			0x01
 #define STATE_RESETTING			0x02
 
+#define MODE_PROGRESSING		0x00	// jazda w przód
+#define MODE_REVERSING			0x01	// cofanie przy iteracji >8
+#define MODE_BACK45_TURNING		0x02	// zwrot do ty³u o 45deg
+#define MODE_BACK90_TURNING		0x03	// zwrot do ty³u o 90deg
+
 #endif /* ATMEGA_MASTER_CONF_H_ */
