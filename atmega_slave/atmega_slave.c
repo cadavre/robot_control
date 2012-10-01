@@ -13,7 +13,7 @@
  * Variables for stepping motors controls
  */
 volatile uint8_t motor_current_step[2] = {1,1};		// 1-8
-volatile uint16_t motor_pos[2] = {0,5};
+volatile uint16_t motor_pos[2] = {0,0};
 volatile uint8_t set_speed = 0;
 volatile uint8_t motor_speed[2] = {0,0};
 
@@ -24,7 +24,7 @@ volatile uint8_t memory_state[6] = {0,0,0,0,0,0};
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
 
 uint8_t iteration = 0;					// iteration number - one round is 8 (90deg=2, 45deg=1)
-uint8_t course = 0;						// course number - first is zero
+uint8_t course = 1;						// course number
 uint8_t max_dimension = 0;				// dm, max 25.5m
 uint8_t total_dist = 0;					// m, max 255m
 
@@ -41,6 +41,8 @@ uint8_t current_mode = MODE_STANDING;
  */
 void motor_make_step(uint8_t motor, uint8_t dir);
 void motor_move(uint8_t motor, uint8_t dir);
+void reset(void);
+void run(void);
 
 /*
  * Initialize ports for stepping motors outputs
@@ -114,8 +116,17 @@ ISR(TIMER0_OVF_vect) {
 			motor_move(1,0);
 		} else if (current_mode == MODE_REVERSING) {
 			// both same speed reverse
-			motor_move(0,1);
-			motor_move(1,1);
+			if (motor_pos[0] > 0) {
+				motor_move(0,1);
+				motor_pos[0]--;
+			}
+			if (motor_pos[1] > 0) {
+				motor_move(1,1);
+				motor_pos[1]--;
+			}
+			if (motor_pos[0] == 0 && motor_pos[1] == 0) {
+				current_mode = MODE_STANDING;
+			}
 		} else if (current_mode == MODE_BACK90_TURNING) {
 			// turning 90deg to back
 			//motor_move(0,1);
@@ -155,8 +166,11 @@ int main(void)
 		if (current_state == STATE_RUNNING) {
 			if (btn_state[0] == BTN_ON || btn_state[1] == BTN_ON) {
 				if (i == 0) {
+					course = 1 + iteration/8;
+					// temp
+					motor_pos[0] = motor_pos[1] = M_ROTATE_STEPS * (course * VACU_LENGTH/VACU_DIST_PER_ROTATE);		// countdown for reverse steps
+					// temp
 					current_mode = MODE_REVERSING;
-					course = iteration/8;
 					if (btn_state[0] == BTN_ON) {
 						// jeb³ œrodek
 					} else if (btn_state[1] == BTN_ON) {
@@ -186,13 +200,11 @@ int main(void)
 
 			if (btn_state[5] == BTN_L && current_state == STATE_IDLE) {
 				// wciœniêto start podczas gdy w idle
-				current_state = STATE_RUNNING; // todo move to method
-				current_mode = MODE_PROGRESSING; // todo
+				run();
 				btn_state[5] = BTN_OFF;
 			} else if (btn_state[5] == BTN_R && current_state == STATE_RUNNING) {
 				// wciœniêto reset podczas gdy odkurza³
-				current_state = STATE_IDLE; // todo move to method
-				current_mode = MODE_STANDING; // todo
+				reset();
 				btn_state[5] = BTN_OFF;
 			}
 
@@ -231,6 +243,29 @@ int main(void)
 /********************************************** END OF MAIN **********************************************/
 
 /*
+ * Reset all variables states to default
+ */
+void reset(void) {
+	motor_pos[0] = 0;
+	motor_pos[1] = 0;
+	iteration = 0;
+	course = 1;
+	max_dimension = 0;
+	total_dist = 0;
+
+	current_state = STATE_IDLE;
+	current_mode = MODE_STANDING;
+}
+
+/*
+ * Go make some vacumming!
+ */
+void run(void) {
+	current_state = STATE_RUNNING;
+	current_mode = MODE_PROGRESSING;
+}
+
+/*
  *	Toggle ports states to switch coil set - make step
  */
 void motor_make_step(uint8_t motor, uint8_t step) {
@@ -253,18 +288,6 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 			case 4:
 				M0_STEP4;
 				break;
-			case 5:
-				//M0_STEP5;
-				break;
-			case 6:
-				//M0_STEP6;
-				break;
-			case 7:
-				//M0_STEP7;
-				break;
-			case 8:
-				//M0_STEP8;
-				break;
 		}
 	} else if (motor==1) {
 		switch(step) {
@@ -280,18 +303,6 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 			case 4:
 				M1_STEP4;
 				break;
-			case 5:
-				//M1_STEP5;
-				break;
-			case 6:
-				//M1_STEP6;
-				break;
-			case 7:
-				//M1_STEP7;
-				break;
-			case 8:
-				//M1_STEP8;
-				break;
 		}
 	}
 	motor_current_step[motor] = step;
@@ -303,19 +314,4 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 void motor_move(uint8_t motor, uint8_t dir) {
 	uint8_t next_step = (dir==1) ? motor_current_step[motor]+1 : motor_current_step[motor]-1;	// just increment, checking if step available in make_step();
 	motor_make_step(motor, next_step);
-	if (motor==0) {
-		if (dir==0 && motor_pos[0]==M0_POS_MIN) {
-			motor_pos[0] = M0_POS_MAX;
-		} else if (dir==1 && motor_pos[0]==M0_POS_MAX) {
-			motor_pos[0] = M0_POS_MIN;
-		} else {
-			motor_pos[0] = (dir==1) ? motor_pos[0]+1 : motor_pos[0]-1;
-		}
-	} else if (motor==1) {
-		if (dir==0) {
-			motor_pos[1]--;
-		} else if (dir==1) {
-			motor_pos[1]++;
-		}
-	}
 }

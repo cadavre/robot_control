@@ -50,25 +50,14 @@
 #define M1_STEP7				PORTC |= M1_BP|M1_BM; PORTC &= ~(M1_AP|M1_AM)
 #define M1_STEP8				PORTC |= M1_BM; PORTC &= ~(M1_AP|M1_AM|M1_BP)*/
 
-// krokowe: stany prze³¹czeñ kroków
-#define M0_SWITCH_FLAG			100
-#define M1_SWITCH_FLAG			200
+// krokowce - specyfikacja
+#define M_ROTATE_STEPS			48
 
-// krokowe: ograniczenie prêdkoœci
+// ograniczenie prêdkoœci krokowców
 #define M0_SPD_L				0
 #define M0_SPD_H				220
 #define M1_SPD_L				0
 #define M1_SPD_H				220
-
-// krokowe: ratio prze³o¿eñ na jednostkê
-#define M0_RATIO				1
-#define M1_RATIO				1
-
-// krokowe: ograniczenie pozycji
-#define M0_POS_MIN				0
-#define M0_POS_MAX				400
-#define M1_POS_MIN				1
-#define M1_POS_MAX				40000
 
 // oznaczenia czujników
 #define SEN_L		(1<<PC0)	// lewy
@@ -85,7 +74,7 @@
 
 // flaga reakcji na wciœniêcie
 #define BTN_GET_ON	4
-#define SENS_IDLE	3000
+#define SENS_IDLE	3000		// czas zw³oki do nastêpnego pomiaru z sensorów (1-60000)
 
 // definicje stanów flag
 #define STATE_IDLE				0x00
@@ -96,5 +85,9 @@
 #define MODE_REVERSING			0x02	// cofanie przy iteracji >8
 #define MODE_BACK45_TURNING		0x03	// zwrot do ty³u o 45deg
 #define MODE_BACK90_TURNING		0x04	// zwrot do ty³u o 90deg
+
+// poruszanie siê odkurzacza
+#define VACU_LENGTH						40		// d³. odkurzacza [cm]									TODO
+#define VACU_DIST_PER_ROTATE			40		// dyst. na jeden pe³ny obrót [cm]						TODO
 
 #endif /* ATMEGA_SLAVE_CONF_H_ */
