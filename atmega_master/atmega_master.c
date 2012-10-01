@@ -146,11 +146,9 @@ int main(void)
 
 		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
 			if ( memory_state[0] == STATE_RUNNING ) {
-				// lcd_refresh();
-				lcd_debug();
+				lcd_refresh();
 			} else {
-				// lcd_welcome();
-				lcd_debug();
+				lcd_welcome();
 			}
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
@@ -214,52 +212,40 @@ void lcd_debug(void) {
 void lcd_refresh(void) {
 	lcd_cls();
 
-	// SENSor
+	// ON info
 	lcd_locate(0,0);
-	lcd_str("SENS");
-	lcd_locate(0,4);
-	if (btn_state[0] == BTN_ON) {
-		lcd_str("C");
-	} else if (btn_state[1] == BTN_ON) {
-		lcd_str("L");
-	} else {
-		lcd_str(" ");
+	lcd_str("ON");
+	// MODE name
+	lcd_locate(0,3);
+	if (memory_state[1] == MODE_PROGRESSING) {
+		lcd_str("PROGRESSING");
+	} else if (memory_state[1] == MODE_REVERSING) {
+		lcd_str("REVERSING");
+	} else if (memory_state[1] == MODE_BACK_TURNING) {
+		lcd_str("TURNING");
 	}
-
-	// MODE
-	lcd_locate(0,6);
-	lcd_str("MODE");
-	lcd_locate(0,10);
-	lcd_int(memory_state[1]); // current mode
-	// CouRse number
+	// ITERATION number
 	lcd_locate(1,0);
-	lcd_str("IT");
-	lcd_locate(1,2);
-	lcd_int(memory_state[3]); // number of courses
-	// DiSTance
-	lcd_locate(1,6);
-	lcd_str("LN");
-	lcd_locate(1,8);
-	lcd_int(memory_state[4]); // total distance in meters
-	// SPD
-	lcd_locate(0,13);
-	lcd_str("SPD");
-	lcd_locate(1,13);
-	lcd_int(memory_state[5]); // 8bit value
-	// separators
-	lcd_locate(0,5);
-	lcd_str("\x80");
-	lcd_locate(0,11);
-	lcd_str("\x80");
-	lcd_locate(1,5);
-	lcd_str("\x80");
-	lcd_locate(1,11);
-	lcd_str("\x80");
-	// two empty fields
-	lcd_locate(0,12);
-	lcd_str(" ");
-	lcd_locate(1,12);
-	lcd_str(" ");
+	lcd_str("ITE");
+	lcd_locate(1,3);
+	lcd_int(memory_state[3]);
+	// COURSE number
+	lcd_locate(1,7);
+	lcd_str("COU");
+	lcd_locate(1,10);
+	lcd_int(memory_state[2]);
+	// BUTTON indicator
+	lcd_locate(0,15);
+	if (btn_state[5] != 0) {
+		lcd_str("B");
+	}
+	// SENSOR indicator
+	lcd_locate(1,15);
+	if (btn_state[0] != 0) {
+		lcd_str("C");
+	} else if (btn_state[1] != 0) {
+		lcd_str("L");
+	}
 }
 
 /*

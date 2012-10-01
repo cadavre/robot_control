@@ -25,10 +25,11 @@ volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF
 
 uint8_t iteration = 0;					// iteration number - one round is 8 (90deg=2, 45deg=1)
 uint8_t course = 1;						// course number
+uint8_t next_mode = 0;
 uint8_t max_dimension = 0;				// dm, max 25.5m
 uint8_t total_dist = 0;					// m, max 255m
 
-uint16_t i = 0;
+uint32_t i = 0;
 volatile uint8_t j = 0;
 volatile uint8_t btn_get_flag = 0;
 volatile uint8_t stepper_flag = 0;
@@ -43,6 +44,9 @@ void motor_make_step(uint8_t motor, uint8_t dir);
 void motor_move(uint8_t motor, uint8_t dir);
 void reset(void);
 void run(void);
+void reverse(void);
+void turn90(void);
+void turn45(void);
 
 /*
  * Initialize ports for stepping motors outputs
@@ -118,21 +122,21 @@ ISR(TIMER0_OVF_vect) {
 			// both same speed reverse
 			if (motor_pos[0] > 0) {
 				motor_move(0,1);
+				motor_move(1,1);
 				motor_pos[0]--;
 			}
+			if (motor_pos[0] == 0) {
+				current_mode = next_mode;
+			}
+		} else if (current_mode == MODE_BACK_TURNING) {
+			// turning 90deg to back
 			if (motor_pos[1] > 0) {
 				motor_move(1,1);
 				motor_pos[1]--;
 			}
-			if (motor_pos[0] == 0 && motor_pos[1] == 0) {
-				current_mode = MODE_STANDING;
+			if (motor_pos[1] == 0) {
+				current_mode = MODE_PROGRESSING;
 			}
-		} else if (current_mode == MODE_BACK90_TURNING) {
-			// turning 90deg to back
-			//motor_move(0,1);
-		} else if (current_mode == MODE_BACK45_TURNING) {
-			// turning 45deg to back
-			//motor_move(0,1);
 		}
 	}
 
@@ -166,31 +170,23 @@ int main(void)
 		if (current_state == STATE_RUNNING) {
 			if (btn_state[0] == BTN_ON || btn_state[1] == BTN_ON) {
 				if (i == 0) {
-					course = 1 + iteration/8;
-					// temp
-					motor_pos[0] = motor_pos[1] = M_ROTATE_STEPS * (course * VACU_LENGTH/VACU_DIST_PER_ROTATE);		// countdown for reverse steps
-					// temp
-					current_mode = MODE_REVERSING;
+					reverse();
 					if (btn_state[0] == BTN_ON) {
-						// jeb³ œrodek
+						// sensed center
+						turn90();
 					} else if (btn_state[1] == BTN_ON) {
-						// jeb³ lewy
+						// sensed left
+						turn45();
 					}
+					i++;
 				} else if (i == SENS_IDLE) {
 					i = 0;
 				} else {
 					i++;
 				}
-				btn_state[0] = BTN_OFF;
-				btn_state[1] = BTN_OFF;
+			} else {
+				i = 0;
 			}
-			/*
-			* 1. course = iteration/8		[floor]
-			*	  (course > 1) { reverse o (course*VACUM_WIDTH) }
-			* 2. (œrodek) { odwróæ o 90deg }
-			*    (lewy) { odwróc o 45deg }
-			* 3. jedŸ
-			*/
 		}
 
 		/*
@@ -211,8 +207,8 @@ int main(void)
 			// refresh current memory
 			memory_state[0] = current_state;
 			memory_state[1] = current_mode;
-			//memory_state[2] = ;
-			memory_state[3] = course;
+			memory_state[2] = course;
+			memory_state[3] = iteration;
 			memory_state[4] = total_dist;
 
 			// measure value for speed
@@ -263,6 +259,33 @@ void reset(void) {
 void run(void) {
 	current_state = STATE_RUNNING;
 	current_mode = MODE_PROGRESSING;
+}
+
+/*
+ * Go straight back by multiplier of vaccum course
+ */
+void reverse(void) {
+	course = 1 + iteration/8;
+	motor_pos[0] = M_ROTATE_STEPS * (course * VACU_LENGTH/VACU_DIST_PER_ROTATE);		// countdown for reverse steps
+	current_mode = MODE_REVERSING;
+}
+
+/*
+ * Turn by 90deg
+ */
+void turn90(void) {
+	iteration += 2;
+	motor_pos[1] = VACU_STEPS_TO_TURN90;
+	next_mode = MODE_BACK_TURNING;
+}
+
+/*
+ * Turn by 45deg
+ */
+void turn45(void) {
+	iteration += 1;
+	motor_pos[1] = VACU_STEPS_TO_TURN90/2;
+	next_mode = MODE_BACK_TURNING;
 }
 
 /*

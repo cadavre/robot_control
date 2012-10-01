@@ -74,7 +74,7 @@
 
 // flaga reakcji na wciœniêcie
 #define BTN_GET_ON	4
-#define SENS_IDLE	3000		// czas zw³oki do nastêpnego pomiaru z sensorów (1-60000)
+#define SENS_IDLE	300000		// czas zw³oki do nastêpnego pomiaru z sensorów (1-4000000)
 
 // definicje stanów flag
 #define STATE_IDLE				0x00
@@ -83,11 +83,11 @@
 #define MODE_STANDING			0x00	// stoi
 #define MODE_PROGRESSING		0x01	// jazda w przód
 #define MODE_REVERSING			0x02	// cofanie przy iteracji >8
-#define MODE_BACK45_TURNING		0x03	// zwrot do ty³u o 45deg
-#define MODE_BACK90_TURNING		0x04	// zwrot do ty³u o 90deg
+#define MODE_BACK_TURNING		0x03	// obrót
 
 // poruszanie siê odkurzacza
 #define VACU_LENGTH						40		// d³. odkurzacza [cm]									TODO
 #define VACU_DIST_PER_ROTATE			40		// dyst. na jeden pe³ny obrót [cm]						TODO
+#define VACU_STEPS_TO_TURN90			60
 
 #endif /* ATMEGA_SLAVE_CONF_H_ */
