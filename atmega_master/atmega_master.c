@@ -19,17 +19,14 @@ uint8_t separator_sign[] = {4,4,4,4,4,4,4,4};			// separator sign for lcd
 volatile uint8_t refresh_flag = 0;
 volatile uint8_t j = 0;
 
-volatile uint8_t current_state = STATE_IDLE;
-
 /*
  * Prototypes
  */
 void lcd_drive(int value, char *str);
 void lcd_refresh(void);
 void lcd_welcome(void);
-void USART_send_report(void);
-// void lcd_reset_info(void);
 void lcd_debug(void);
+void USART_send_report(void);
 
 /*
  * Timer2 initialization
@@ -147,14 +144,14 @@ int main(void)
 			}
 		}
 
-		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 && memory_state[0] == STATE_RUNNING ) {
-			lcd_refresh();
-		} else if ( memory_state[0] == STATE_RESETTING ) {
-			// lcd_reset_info();
-			lcd_debug();
-		} else {
-			// lcd_welcome();
-			lcd_debug();
+		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
+			if ( memory_state[0] == STATE_RUNNING ) {
+				// lcd_refresh();
+				lcd_debug();
+			} else {
+				// lcd_welcome();
+				lcd_debug();
+			}
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
 			// USART_send_report();
@@ -191,7 +188,7 @@ void lcd_debug(void) {
 	lcd_locate(0,4);
 	lcd_int(btn_state[4] == 1);
 	lcd_locate(0,5);
-	lcd_int(btn_state[5] == BTN_L || btn_state[5] == BTN_R);
+	lcd_int(btn_state[5] == BTN_L ? 1 : btn_state[5] == BTN_R ? 2 : 0);
 	lcd_locate(0,7);
 	lcd_str("ST");
 	lcd_locate(0,9);
@@ -200,6 +197,15 @@ void lcd_debug(void) {
 	lcd_str("MO");
 	lcd_locate(0,13);
 	lcd_int(memory_state[1]);
+
+	lcd_locate(1,0);
+	lcd_int(memory_state[2]);
+	lcd_locate(1,3);
+	lcd_int(memory_state[3]);
+	lcd_locate(1,6);
+	lcd_int(memory_state[4]);
+	lcd_locate(1,9);
+	lcd_int(memory_state[5]);
 }
 
 /*
@@ -224,12 +230,12 @@ void lcd_refresh(void) {
 	lcd_locate(0,6);
 	lcd_str("MODE");
 	lcd_locate(0,10);
-	lcd_str(" "); // todo
-	// ITeration
+	lcd_int(memory_state[1]); // current mode
+	// CouRse number
 	lcd_locate(1,0);
 	lcd_str("IT");
 	lcd_locate(1,2);
-	lcd_int(memory_state[3]); // number of iteration
+	lcd_int(memory_state[3]); // number of courses
 	// DiSTance
 	lcd_locate(1,6);
 	lcd_str("LN");

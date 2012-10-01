@@ -23,16 +23,18 @@ volatile uint8_t motor_speed[2] = {0,0};
 volatile uint8_t memory_state[6] = {0,0,0,0,0,0};
 volatile uint8_t btn_state[6] = {BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF,BTN_OFF};
 
-volatile uint16_t iteration = 0;				// iteration number - one round is 8 (90deg=2, 45deg=1)
-volatile uint8_t dimensions[2] = {0,0};			// dm, max 25.5m
-volatile uint8_t total_dist = 0;				// m, max 255m
+uint8_t iteration = 0;					// iteration number - one round is 8 (90deg=2, 45deg=1)
+uint8_t course = 0;						// course number - first is zero
+uint8_t max_dimension = 0;				// dm, max 25.5m
+uint8_t total_dist = 0;					// m, max 255m
 
+uint16_t i = 0;
 volatile uint8_t j = 0;
 volatile uint8_t btn_get_flag = 0;
 volatile uint8_t stepper_flag = 0;
 
-volatile uint8_t current_state = STATE_IDLE;
-volatile uint8_t current_mode = MODE_PROGRESSING;
+uint8_t current_state = STATE_IDLE;
+uint8_t current_mode = MODE_STANDING;
 
 /*
  * Prototypes
@@ -106,16 +108,14 @@ ISR(TIMER0_OVF_vect) {
 	}
 
 	if (stepper_flag == 0) {
-		motor_move(0,0); // temp for test
-		motor_move(1,0); // temp for test
 		if (current_mode == MODE_PROGRESSING) {
 			// both same speed forward
-			//motor_move(0,0);
-			//motor_move(1,0);
+			motor_move(0,0);
+			motor_move(1,0);
 		} else if (current_mode == MODE_REVERSING) {
 			// both same speed reverse
-			//motor_move(0,1);
-			//motor_move(1,1);
+			motor_move(0,1);
+			motor_move(1,1);
 		} else if (current_mode == MODE_BACK90_TURNING) {
 			// turning 90deg to back
 			//motor_move(0,1);
@@ -148,41 +148,60 @@ int main(void)
 	sei();
 	while(1)
 	{
+
+		/*
+		 * Handle signals from sensors
+		 */
 		if (current_state == STATE_RUNNING) {
-			/*
-			 * 1. course = iteration/8		[floor]
-			 *	  (course > 1) { reverse o course*VACUM_WIDTH }
-			 * 2. (œrodek) { odwróæ o 90deg }
-			 *    (lewy) { odwróc o 45deg }
-			 * 3. jedŸ
-			 */
-			if (btn_state[0] == BTN_ON) {
-				// jeb³ œrodek
+			if (btn_state[0] == BTN_ON || btn_state[1] == BTN_ON) {
+				if (i == 0) {
+					current_mode = MODE_REVERSING;
+					course = iteration/8;
+					if (btn_state[0] == BTN_ON) {
+						// jeb³ œrodek
+					} else if (btn_state[1] == BTN_ON) {
+						// jeb³ lewy
+					}
+				} else if (i == SENS_IDLE) {
+					i = 0;
+				} else {
+					i++;
+				}
 				btn_state[0] = BTN_OFF;
-			} else if (btn_state[1] == BTN_ON) {
-				// jeb³ lewy
 				btn_state[1] = BTN_OFF;
 			}
+			/*
+			* 1. course = iteration/8		[floor]
+			*	  (course > 1) { reverse o (course*VACUM_WIDTH) }
+			* 2. (œrodek) { odwróæ o 90deg }
+			*    (lewy) { odwróc o 45deg }
+			* 3. jedŸ
+			*/
 		}
 
+		/*
+		 * Handle signals from buttons
+		 */
 		if (btn_get_flag == BTN_GET_ON) {
 
 			if (btn_state[5] == BTN_L && current_state == STATE_IDLE) {
 				// wciœniêto start podczas gdy w idle
-				current_state = STATE_RUNNING;
+				current_state = STATE_RUNNING; // todo move to method
+				current_mode = MODE_PROGRESSING; // todo
 				btn_state[5] = BTN_OFF;
 			} else if (btn_state[5] == BTN_R && current_state == STATE_RUNNING) {
 				// wciœniêto reset podczas gdy odkurza³
-				current_state = STATE_RESETTING;
+				current_state = STATE_IDLE; // todo move to method
+				current_mode = MODE_STANDING; // todo
 				btn_state[5] = BTN_OFF;
 			}
 
 			// refresh current memory
-			//memory_state[0] = mode;
-			memory_state[1] = total_dist;
+			memory_state[0] = current_state;
+			memory_state[1] = current_mode;
 			//memory_state[2] = ;
-			//memory_state[3] = ;
-			//memory_state[4] = ;
+			memory_state[3] = course;
+			memory_state[4] = total_dist;
 
 			// measure value for speed
 			ADCSRA |= (1<<ADSC);
@@ -235,16 +254,16 @@ void motor_make_step(uint8_t motor, uint8_t step) {
 				M0_STEP4;
 				break;
 			case 5:
-				M0_STEP5;
+				//M0_STEP5;
 				break;
 			case 6:
-				M0_STEP6;
+				//M0_STEP6;
 				break;
 			case 7:
-				M0_STEP7;
+				//M0_STEP7;
 				break;
 			case 8:
-				M0_STEP8;
+				//M0_STEP8;
 				break;
 		}
 	} else if (motor==1) {
@@ -282,7 +301,7 @@ void motor_make_step(uint8_t motor, uint8_t step) {
  * Move servo in particular directory by requesting step change
  */
 void motor_move(uint8_t motor, uint8_t dir) {
-	uint8_t next_step = (dir==1) ? motor_current_step[motor]+1 : motor_current_step[motor]-1;		// 0-8
+	uint8_t next_step = (dir==1) ? motor_current_step[motor]+1 : motor_current_step[motor]-1;	// just increment, checking if step available in make_step();
 	motor_make_step(motor, next_step);
 	if (motor==0) {
 		if (dir==0 && motor_pos[0]==M0_POS_MIN) {

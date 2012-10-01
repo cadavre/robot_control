@@ -84,16 +84,17 @@
 #define BTN_R		0x02		// wciœniêty Prawy
 
 // flaga reakcji na wciœniêcie
-#define BTN_GET_ON	40
+#define BTN_GET_ON	4
+#define SENS_IDLE	3000
 
 // definicje stanów flag
 #define STATE_IDLE				0x00
 #define STATE_RUNNING			0x01
-#define STATE_RESETTING			0x02
 
-#define MODE_PROGRESSING		0x00	// jazda w przód
-#define MODE_REVERSING			0x01	// cofanie przy iteracji >8
-#define MODE_BACK45_TURNING		0x02	// zwrot do ty³u o 45deg
-#define MODE_BACK90_TURNING		0x03	// zwrot do ty³u o 90deg
+#define MODE_STANDING			0x00	// stoi
+#define MODE_PROGRESSING		0x01	// jazda w przód
+#define MODE_REVERSING			0x02	// cofanie przy iteracji >8
+#define MODE_BACK45_TURNING		0x03	// zwrot do ty³u o 45deg
+#define MODE_BACK90_TURNING		0x04	// zwrot do ty³u o 90deg
 
 #endif /* ATMEGA_SLAVE_CONF_H_ */

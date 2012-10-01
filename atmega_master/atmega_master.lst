@@ -271,434 +271,593 @@
  290               	.LFE9:
  292               		.data
  293               	.LC2:
- 294 0018 5345 4E53 		.string	"SENS"
- 294      00
+ 294 0018 5354 00   		.string	"ST"
  295               	.LC3:
- 296 001d 4300      		.string	"C"
- 297               	.LC4:
- 298 001f 4C00      		.string	"L"
- 299               	.LC5:
- 300 0021 2000      		.string	" "
- 301               	.LC6:
- 302 0023 4D4F 4445 		.string	"MODE"
- 302      00
- 303               	.LC7:
- 304 0028 4954 00   		.string	"IT"
- 305               	.LC8:
- 306 002b 4C4E 00   		.string	"LN"
- 307               	.LC9:
- 308 002e 5350 4400 		.string	"SPD"
- 309               	.LC10:
- 310 0032 8000      		.string	"\200"
- 311               		.text
- 312               	.global	lcd_refresh
- 314               	lcd_refresh:
- 315               	.LFB10:
- 316               	.LM47:
- 317               	/* prologue: function */
- 318               	/* frame size = 0 */
- 319               	/* stack size = 0 */
- 320               	.L__stack_usage = 0
- 321               	.LM48:
- 322 0100 00D0      		rcall lcd_cls
- 323               	.LM49:
- 324 0102 80E0      		ldi r24,lo8(0)
- 325 0104 60E0      		ldi r22,lo8(0)
- 326 0106 00D0      		rcall lcd_locate
- 327               	.LM50:
- 328 0108 80E0      		ldi r24,lo8(.LC2)
- 329 010a 90E0      		ldi r25,hi8(.LC2)
- 330 010c 00D0      		rcall lcd_str
- 331               	.LM51:
- 332 010e 80E0      		ldi r24,lo8(0)
- 333 0110 64E0      		ldi r22,lo8(4)
- 334 0112 00D0      		rcall lcd_locate
- 335               	.LM52:
- 336 0114 8091 0000 		lds r24,btn_state
- 337 0118 8130      		cpi r24,lo8(1)
- 338 011a 01F4      		brne .L15
- 339               	.LM53:
- 340 011c 80E0      		ldi r24,lo8(.LC3)
- 341 011e 90E0      		ldi r25,hi8(.LC3)
- 342 0120 00C0      		rjmp .L18
- 343               	.L15:
- 344               	.LM54:
- 345 0122 8091 0000 		lds r24,btn_state+1
- 346 0126 8130      		cpi r24,lo8(1)
- 347 0128 01F4      		brne .L17
- 348               	.LM55:
- 349 012a 80E0      		ldi r24,lo8(.LC4)
- 350 012c 90E0      		ldi r25,hi8(.LC4)
- 351 012e 00C0      		rjmp .L18
- 352               	.L17:
- 353               	.LM56:
- 354 0130 80E0      		ldi r24,lo8(.LC5)
- 355 0132 90E0      		ldi r25,hi8(.LC5)
- 356               	.L18:
- 357 0134 00D0      		rcall lcd_str
- 358               	.LM57:
- 359 0136 80E0      		ldi r24,lo8(0)
- 360 0138 66E0      		ldi r22,lo8(6)
- 361 013a 00D0      		rcall lcd_locate
- 362               	.LM58:
- 363 013c 80E0      		ldi r24,lo8(.LC6)
- 364 013e 90E0      		ldi r25,hi8(.LC6)
- 365 0140 00D0      		rcall lcd_str
- 366               	.LM59:
- 367 0142 80E0      		ldi r24,lo8(0)
- 368 0144 6AE0      		ldi r22,lo8(10)
- 369 0146 00D0      		rcall lcd_locate
- 370               	.LM60:
- 371 0148 80E0      		ldi r24,lo8(.LC5)
- 372 014a 90E0      		ldi r25,hi8(.LC5)
- 373 014c 00D0      		rcall lcd_str
- 374               	.LM61:
- 375 014e 81E0      		ldi r24,lo8(1)
- 376 0150 60E0      		ldi r22,lo8(0)
- 377 0152 00D0      		rcall lcd_locate
- 378               	.LM62:
- 379 0154 80E0      		ldi r24,lo8(.LC7)
- 380 0156 90E0      		ldi r25,hi8(.LC7)
- 381 0158 00D0      		rcall lcd_str
- 382               	.LM63:
- 383 015a 81E0      		ldi r24,lo8(1)
- 384 015c 62E0      		ldi r22,lo8(2)
- 385 015e 00D0      		rcall lcd_locate
- 386               	.LM64:
- 387 0160 8091 0000 		lds r24,iteration
- 388 0164 9091 0000 		lds r25,iteration+1
- 389 0168 00D0      		rcall lcd_int
- 390               	.LM65:
- 391 016a 81E0      		ldi r24,lo8(1)
- 392 016c 66E0      		ldi r22,lo8(6)
- 393 016e 00D0      		rcall lcd_locate
- 394               	.LM66:
- 395 0170 80E0      		ldi r24,lo8(.LC8)
- 396 0172 90E0      		ldi r25,hi8(.LC8)
- 397 0174 00D0      		rcall lcd_str
- 398               	.LM67:
- 399 0176 81E0      		ldi r24,lo8(1)
- 400 0178 68E0      		ldi r22,lo8(8)
- 401 017a 00D0      		rcall lcd_locate
- 402               	.LM68:
- 403 017c 8091 0000 		lds r24,total_dist
- 404 0180 64E6      		ldi r22,lo8(100)
- 405 0182 00D0      		rcall __udivmodqi4
- 406 0184 90E0      		ldi r25,lo8(0)
- 407 0186 00D0      		rcall lcd_int
- 408               	.LM69:
- 409 0188 80E0      		ldi r24,lo8(0)
- 410 018a 6DE0      		ldi r22,lo8(13)
- 411 018c 00D0      		rcall lcd_locate
- 412               	.LM70:
- 413 018e 80E0      		ldi r24,lo8(.LC9)
- 414 0190 90E0      		ldi r25,hi8(.LC9)
- 415 0192 00D0      		rcall lcd_str
- 416               	.LM71:
- 417 0194 81E0      		ldi r24,lo8(1)
- 418 0196 6DE0      		ldi r22,lo8(13)
- 419 0198 00D0      		rcall lcd_locate
- 420               	.LM72:
- 421 019a 8091 0000 		lds r24,memory_state+5
- 422 019e 90E0      		ldi r25,lo8(0)
- 423 01a0 00D0      		rcall lcd_int
- 424               	.LM73:
- 425 01a2 80E0      		ldi r24,lo8(0)
- 426 01a4 65E0      		ldi r22,lo8(5)
- 427 01a6 00D0      		rcall lcd_locate
- 428               	.LM74:
- 429 01a8 80E0      		ldi r24,lo8(.LC10)
- 430 01aa 90E0      		ldi r25,hi8(.LC10)
- 431 01ac 00D0      		rcall lcd_str
- 432               	.LM75:
- 433 01ae 80E0      		ldi r24,lo8(0)
- 434 01b0 6BE0      		ldi r22,lo8(11)
- 435 01b2 00D0      		rcall lcd_locate
- 436               	.LM76:
- 437 01b4 80E0      		ldi r24,lo8(.LC10)
- 438 01b6 90E0      		ldi r25,hi8(.LC10)
- 439 01b8 00D0      		rcall lcd_str
- 440               	.LM77:
- 441 01ba 81E0      		ldi r24,lo8(1)
- 442 01bc 65E0      		ldi r22,lo8(5)
- 443 01be 00D0      		rcall lcd_locate
- 444               	.LM78:
- 445 01c0 80E0      		ldi r24,lo8(.LC10)
- 446 01c2 90E0      		ldi r25,hi8(.LC10)
- 447 01c4 00D0      		rcall lcd_str
- 448               	.LM79:
- 449 01c6 81E0      		ldi r24,lo8(1)
- 450 01c8 6BE0      		ldi r22,lo8(11)
- 451 01ca 00D0      		rcall lcd_locate
- 452               	.LM80:
- 453 01cc 80E0      		ldi r24,lo8(.LC10)
- 454 01ce 90E0      		ldi r25,hi8(.LC10)
- 455 01d0 00D0      		rcall lcd_str
- 456               	.LM81:
- 457 01d2 80E0      		ldi r24,lo8(0)
- 458 01d4 6CE0      		ldi r22,lo8(12)
- 459 01d6 00D0      		rcall lcd_locate
- 460               	.LM82:
- 461 01d8 80E0      		ldi r24,lo8(.LC5)
- 462 01da 90E0      		ldi r25,hi8(.LC5)
- 463 01dc 00D0      		rcall lcd_str
- 464               	.LM83:
- 465 01de 81E0      		ldi r24,lo8(1)
- 466 01e0 6CE0      		ldi r22,lo8(12)
- 467 01e2 00D0      		rcall lcd_locate
- 468               	.LM84:
- 469 01e4 80E0      		ldi r24,lo8(.LC5)
- 470 01e6 90E0      		ldi r25,hi8(.LC5)
- 471 01e8 00D0      		rcall lcd_str
- 472               	/* epilogue start */
- 473               	.LM85:
- 474 01ea 0895      		ret
- 475               	.LFE10:
- 477               		.data
- 478               	.LC11:
- 479 0034 0D0A 2323 		.string	"\r\n#### Report ####"
- 479      2323 2052 
- 479      6570 6F72 
- 479      7420 2323 
- 479      2323 00
- 480               		.text
- 481               	.global	USART_send_report
- 483               	USART_send_report:
- 484               	.LFB11:
- 485               	.LM86:
- 486               	/* prologue: function */
- 487               	/* frame size = 0 */
- 488               	/* stack size = 0 */
- 489               	.L__stack_usage = 0
- 490               	.LM87:
- 491 01ec 80E0      		ldi r24,lo8(.LC11)
- 492 01ee 90E0      		ldi r25,hi8(.LC11)
- 493 01f0 00D0      		rcall USART_string
- 494               	/* epilogue start */
- 495               	.LM88:
- 496 01f2 0895      		ret
- 497               	.LFE11:
- 499               	.global	main
- 501               	main:
- 502               	.LFB8:
- 503               	.LM89:
- 504 01f4 0F93      		push r16
- 505 01f6 1F93      		push r17
- 506               	/* prologue: function */
- 507               	/* frame size = 0 */
- 508               	/* stack size = 2 */
- 509               	.L__stack_usage = 2
- 510               	.LM90:
- 511 01f8 00D0      		rcall controls_init
- 512               	.LM91:
- 513 01fa 00D0      		rcall sensors_init
- 514               	.LM92:
- 515 01fc 00D0      		rcall Timer2_init
- 516               	.LM93:
- 517 01fe 00D0      		rcall SPI_init
- 518               	.LM94:
- 519 0200 83E3      		ldi r24,lo8(51)
- 520 0202 90E0      		ldi r25,hi8(51)
- 521 0204 00D0      		rcall USART_init
- 522               	.LM95:
- 523 0206 88E9      		ldi r24,lo8(-104)
- 524 0208 81BF      		out 81-32,r24
- 525               	.LM96:
- 526               	/* #APP */
- 527               	 ;  119 "atmega_master.c" 1
- 528 020a 7894      		sei
- 529               	 ;  0 "" 2
- 530               	.LM97:
- 531               	/* #NOAPP */
- 532 020c 00D0      		rcall lcd_init
- 533               	.LM98:
- 534 020e 80E8      		ldi r24,lo8(-128)
- 535 0210 60E0      		ldi r22,lo8(separator_sign)
- 536 0212 70E0      		ldi r23,hi8(separator_sign)
- 537 0214 00D0      		rcall lcd_defchar
+ 296 001b 4D4F 00   		.string	"MO"
+ 297               		.text
+ 298               	.global	lcd_debug
+ 300               	lcd_debug:
+ 301               	.LFB10:
+ 302               	.LM47:
+ 303               	/* prologue: function */
+ 304               	/* frame size = 0 */
+ 305               	/* stack size = 0 */
+ 306               	.L__stack_usage = 0
+ 307               	.LM48:
+ 308 0100 00D0      		rcall lcd_cls
+ 309               	.LM49:
+ 310 0102 80E0      		ldi r24,lo8(0)
+ 311 0104 60E0      		ldi r22,lo8(0)
+ 312 0106 00D0      		rcall lcd_locate
+ 313               	.LM50:
+ 314 0108 2091 0000 		lds r18,btn_state
+ 315 010c 81E0      		ldi r24,lo8(1)
+ 316 010e 90E0      		ldi r25,hi8(1)
+ 317 0110 2130      		cpi r18,lo8(1)
+ 318 0112 01F0      		breq .L15
+ 319 0114 80E0      		ldi r24,lo8(0)
+ 320 0116 90E0      		ldi r25,hi8(0)
+ 321               	.L15:
+ 322 0118 00D0      		rcall lcd_int
+ 323               	.LM51:
+ 324 011a 80E0      		ldi r24,lo8(0)
+ 325 011c 61E0      		ldi r22,lo8(1)
+ 326 011e 00D0      		rcall lcd_locate
+ 327               	.LM52:
+ 328 0120 2091 0000 		lds r18,btn_state+1
+ 329 0124 81E0      		ldi r24,lo8(1)
+ 330 0126 90E0      		ldi r25,hi8(1)
+ 331 0128 2130      		cpi r18,lo8(1)
+ 332 012a 01F0      		breq .L16
+ 333 012c 80E0      		ldi r24,lo8(0)
+ 334 012e 90E0      		ldi r25,hi8(0)
+ 335               	.L16:
+ 336 0130 00D0      		rcall lcd_int
+ 337               	.LM53:
+ 338 0132 80E0      		ldi r24,lo8(0)
+ 339 0134 62E0      		ldi r22,lo8(2)
+ 340 0136 00D0      		rcall lcd_locate
+ 341               	.LM54:
+ 342 0138 2091 0000 		lds r18,btn_state+2
+ 343 013c 81E0      		ldi r24,lo8(1)
+ 344 013e 90E0      		ldi r25,hi8(1)
+ 345 0140 2130      		cpi r18,lo8(1)
+ 346 0142 01F0      		breq .L17
+ 347 0144 80E0      		ldi r24,lo8(0)
+ 348 0146 90E0      		ldi r25,hi8(0)
+ 349               	.L17:
+ 350 0148 00D0      		rcall lcd_int
+ 351               	.LM55:
+ 352 014a 80E0      		ldi r24,lo8(0)
+ 353 014c 63E0      		ldi r22,lo8(3)
+ 354 014e 00D0      		rcall lcd_locate
+ 355               	.LM56:
+ 356 0150 2091 0000 		lds r18,btn_state+3
+ 357 0154 81E0      		ldi r24,lo8(1)
+ 358 0156 90E0      		ldi r25,hi8(1)
+ 359 0158 2130      		cpi r18,lo8(1)
+ 360 015a 01F0      		breq .L18
+ 361 015c 80E0      		ldi r24,lo8(0)
+ 362 015e 90E0      		ldi r25,hi8(0)
+ 363               	.L18:
+ 364 0160 00D0      		rcall lcd_int
+ 365               	.LM57:
+ 366 0162 80E0      		ldi r24,lo8(0)
+ 367 0164 64E0      		ldi r22,lo8(4)
+ 368 0166 00D0      		rcall lcd_locate
+ 369               	.LM58:
+ 370 0168 2091 0000 		lds r18,btn_state+4
+ 371 016c 81E0      		ldi r24,lo8(1)
+ 372 016e 90E0      		ldi r25,hi8(1)
+ 373 0170 2130      		cpi r18,lo8(1)
+ 374 0172 01F0      		breq .L19
+ 375 0174 80E0      		ldi r24,lo8(0)
+ 376 0176 90E0      		ldi r25,hi8(0)
+ 377               	.L19:
+ 378 0178 00D0      		rcall lcd_int
+ 379               	.LM59:
+ 380 017a 80E0      		ldi r24,lo8(0)
+ 381 017c 65E0      		ldi r22,lo8(5)
+ 382 017e 00D0      		rcall lcd_locate
+ 383               	.LM60:
+ 384 0180 8091 0000 		lds r24,btn_state+5
+ 385 0184 8130      		cpi r24,lo8(1)
+ 386 0186 01F0      		breq .L21
+ 387               	.LM61:
+ 388 0188 8091 0000 		lds r24,btn_state+5
+ 389 018c 8230      		cpi r24,lo8(2)
+ 390 018e 01F4      		brne .L22
+ 391               	.LM62:
+ 392 0190 82E0      		ldi r24,lo8(2)
+ 393 0192 90E0      		ldi r25,hi8(2)
+ 394 0194 00C0      		rjmp .L20
+ 395               	.L21:
+ 396 0196 81E0      		ldi r24,lo8(1)
+ 397 0198 90E0      		ldi r25,hi8(1)
+ 398 019a 00C0      		rjmp .L20
+ 399               	.L22:
+ 400 019c 80E0      		ldi r24,lo8(0)
+ 401 019e 90E0      		ldi r25,hi8(0)
+ 402               	.L20:
+ 403               	.LM63:
+ 404 01a0 00D0      		rcall lcd_int
+ 405               	.LM64:
+ 406 01a2 80E0      		ldi r24,lo8(0)
+ 407 01a4 67E0      		ldi r22,lo8(7)
+ 408 01a6 00D0      		rcall lcd_locate
+ 409               	.LM65:
+ 410 01a8 80E0      		ldi r24,lo8(.LC2)
+ 411 01aa 90E0      		ldi r25,hi8(.LC2)
+ 412 01ac 00D0      		rcall lcd_str
+ 413               	.LM66:
+ 414 01ae 80E0      		ldi r24,lo8(0)
+ 415 01b0 69E0      		ldi r22,lo8(9)
+ 416 01b2 00D0      		rcall lcd_locate
+ 417               	.LM67:
+ 418 01b4 8091 0000 		lds r24,memory_state
+ 419 01b8 90E0      		ldi r25,lo8(0)
+ 420 01ba 00D0      		rcall lcd_int
+ 421               	.LM68:
+ 422 01bc 80E0      		ldi r24,lo8(0)
+ 423 01be 6BE0      		ldi r22,lo8(11)
+ 424 01c0 00D0      		rcall lcd_locate
+ 425               	.LM69:
+ 426 01c2 80E0      		ldi r24,lo8(.LC3)
+ 427 01c4 90E0      		ldi r25,hi8(.LC3)
+ 428 01c6 00D0      		rcall lcd_str
+ 429               	.LM70:
+ 430 01c8 80E0      		ldi r24,lo8(0)
+ 431 01ca 6DE0      		ldi r22,lo8(13)
+ 432 01cc 00D0      		rcall lcd_locate
+ 433               	.LM71:
+ 434 01ce 8091 0000 		lds r24,memory_state+1
+ 435 01d2 90E0      		ldi r25,lo8(0)
+ 436 01d4 00D0      		rcall lcd_int
+ 437               	.LM72:
+ 438 01d6 81E0      		ldi r24,lo8(1)
+ 439 01d8 60E0      		ldi r22,lo8(0)
+ 440 01da 00D0      		rcall lcd_locate
+ 441               	.LM73:
+ 442 01dc 8091 0000 		lds r24,memory_state+2
+ 443 01e0 90E0      		ldi r25,lo8(0)
+ 444 01e2 00D0      		rcall lcd_int
+ 445               	.LM74:
+ 446 01e4 81E0      		ldi r24,lo8(1)
+ 447 01e6 63E0      		ldi r22,lo8(3)
+ 448 01e8 00D0      		rcall lcd_locate
+ 449               	.LM75:
+ 450 01ea 8091 0000 		lds r24,memory_state+3
+ 451 01ee 90E0      		ldi r25,lo8(0)
+ 452 01f0 00D0      		rcall lcd_int
+ 453               	.LM76:
+ 454 01f2 81E0      		ldi r24,lo8(1)
+ 455 01f4 66E0      		ldi r22,lo8(6)
+ 456 01f6 00D0      		rcall lcd_locate
+ 457               	.LM77:
+ 458 01f8 8091 0000 		lds r24,memory_state+4
+ 459 01fc 90E0      		ldi r25,lo8(0)
+ 460 01fe 00D0      		rcall lcd_int
+ 461               	.LM78:
+ 462 0200 81E0      		ldi r24,lo8(1)
+ 463 0202 69E0      		ldi r22,lo8(9)
+ 464 0204 00D0      		rcall lcd_locate
+ 465               	.LM79:
+ 466 0206 8091 0000 		lds r24,memory_state+5
+ 467 020a 90E0      		ldi r25,lo8(0)
+ 468 020c 00D0      		rcall lcd_int
+ 469               	/* epilogue start */
+ 470               	.LM80:
+ 471 020e 0895      		ret
+ 472               	.LFE10:
+ 474               	.global	main
+ 476               	main:
+ 477               	.LFB8:
+ 478               	.LM81:
+ 479 0210 FF92      		push r15
+ 480 0212 0F93      		push r16
+ 481 0214 1F93      		push r17
+ 482               	/* prologue: function */
+ 483               	/* frame size = 0 */
+ 484               	/* stack size = 3 */
+ 485               	.L__stack_usage = 3
+ 486               	.LM82:
+ 487 0216 00D0      		rcall controls_init
+ 488               	.LM83:
+ 489 0218 00D0      		rcall sensors_init
+ 490               	.LM84:
+ 491 021a 00D0      		rcall Timer2_init
+ 492               	.LM85:
+ 493 021c 00D0      		rcall SPI_init
+ 494               	.LM86:
+ 495 021e 83E3      		ldi r24,lo8(51)
+ 496 0220 90E0      		ldi r25,hi8(51)
+ 497 0222 00D0      		rcall USART_init
+ 498               	.LM87:
+ 499 0224 88E9      		ldi r24,lo8(-104)
+ 500 0226 81BF      		out 81-32,r24
+ 501               	.LM88:
+ 502               	/* #APP */
+ 503               	 ;  114 "atmega_master.c" 1
+ 504 0228 7894      		sei
+ 505               	 ;  0 "" 2
+ 506               	.LM89:
+ 507               	/* #NOAPP */
+ 508 022a 00D0      		rcall lcd_init
+ 509               	.LM90:
+ 510 022c 80E8      		ldi r24,lo8(-128)
+ 511 022e 60E0      		ldi r22,lo8(separator_sign)
+ 512 0230 70E0      		ldi r23,hi8(separator_sign)
+ 513 0232 00D0      		rcall lcd_defchar
+ 514               	.LM91:
+ 515 0234 00D0      		rcall lcd_welcome
+ 516               	.LM92:
+ 517 0236 11E0      		ldi r17,lo8(1)
+ 518               	.LM93:
+ 519 0238 82E0      		ldi r24,lo8(2)
+ 520 023a F82E      		mov r15,r24
+ 521               	.LM94:
+ 522 023c 00E5      		ldi r16,lo8(80)
+ 523               	.L39:
+ 524               	.LM95:
+ 525 023e B099      		sbic 54-32,0
+ 526 0240 00C0      		rjmp .L24
+ 527               	.LM96:
+ 528 0242 1093 0000 		sts btn_state+5,r17
+ 529 0246 00C0      		rjmp .L25
+ 530               	.L24:
+ 531               	.LM97:
+ 532 0248 B199      		sbic 54-32,1
+ 533 024a 00C0      		rjmp .L26
+ 534               	.LM98:
+ 535 024c F092 0000 		sts btn_state+5,r15
+ 536 0250 00C0      		rjmp .L25
+ 537               	.L26:
  538               	.LM99:
- 539 0216 00D0      		rcall lcd_welcome
- 540               	.LM100:
- 541 0218 11E0      		ldi r17,lo8(1)
- 542               	.LM101:
- 543 021a 02E0      		ldi r16,lo8(2)
- 544               	.L36:
- 545               	.LM102:
- 546 021c B099      		sbic 54-32,0
- 547 021e 00C0      		rjmp .L21
- 548               	.LM103:
- 549 0220 1093 0000 		sts btn_state+5,r17
- 550 0224 00C0      		rjmp .L22
- 551               	.L21:
- 552               	.LM104:
- 553 0226 B199      		sbic 54-32,1
- 554 0228 00C0      		rjmp .L23
- 555               	.LM105:
- 556 022a 0093 0000 		sts btn_state+5,r16
- 557 022e 00C0      		rjmp .L22
- 558               	.L23:
- 559               	.LM106:
- 560 0230 1092 0000 		sts btn_state+5,__zero_reg__
- 561               	.L22:
- 562               	.LM107:
- 563 0234 9999      		sbic 51-32,1
- 564 0236 00C0      		rjmp .L24
- 565               	.LM108:
- 566 0238 1093 0000 		sts btn_state,r17
- 567 023c 00C0      		rjmp .L25
- 568               	.L24:
- 569               	.LM109:
- 570 023e 9899      		sbic 51-32,0
- 571 0240 00C0      		rjmp .L26
- 572               	.LM110:
- 573 0242 1093 0000 		sts btn_state+1,r17
- 574 0246 00C0      		rjmp .L25
- 575               	.L26:
- 576               	.LM111:
- 577 0248 9A99      		sbic 51-32,2
- 578 024a 00C0      		rjmp .L27
- 579               	.LM112:
- 580 024c 1092 0000 		sts btn_state+2,__zero_reg__
- 581 0250 00C0      		rjmp .L25
- 582               	.L27:
- 583               	.LM113:
- 584 0252 9B99      		sbic 51-32,3
- 585 0254 00C0      		rjmp .L28
- 586               	.LM114:
- 587 0256 1092 0000 		sts btn_state+3,__zero_reg__
- 588 025a 00C0      		rjmp .L25
- 589               	.L28:
- 590               	.LM115:
- 591 025c 9C9B      		sbis 51-32,4
- 592 025e 00C0      		rjmp .L29
- 593               	.LVL2:
- 594               	.LBB2:
- 595               	.LM116:
- 596 0260 1092 0000 		sts btn_state,__zero_reg__
- 597               	.LVL3:
- 598 0264 1092 0000 		sts btn_state+1,__zero_reg__
- 599               	.LVL4:
- 600 0268 1092 0000 		sts btn_state+2,__zero_reg__
- 601               	.LVL5:
- 602 026c 1092 0000 		sts btn_state+3,__zero_reg__
- 603               	.LVL6:
- 604               	.L29:
- 605               	.LBE2:
- 606               	.LM117:
- 607 0270 1092 0000 		sts btn_state+4,__zero_reg__
- 608               	.L25:
- 609               	.LM118:
- 610 0274 8091 0000 		lds r24,refresh_flag
- 611               	.LM119:
- 612 0278 9091 0000 		lds r25,refresh_flag
- 613 027c 81E0      		ldi r24,lo8(1)
- 614 027e 9C3F      		cpi r25,lo8(-4)
- 615 0280 00F4      		brsh .L31
- 616 0282 80E0      		ldi r24,lo8(0)
- 617               	.L31:
- 618 0284 8195      		neg r24
- 619 0286 880F      		lsl r24
- 620 0288 880F      		lsl r24
- 621 028a 9817      		cp r25,r24
- 622 028c 01F4      		brne .L30
- 623               	.LM120:
- 624 028e 00D0      		rcall USART_send_report
- 625               	.L30:
- 626               	.LM121:
- 627 0290 8091 0000 		lds r24,refresh_flag
- 628 0294 8F3F      		cpi r24,lo8(-1)
- 629 0296 01F4      		brne .L36
- 630               	.LM122:
- 631 0298 1092 0000 		sts refresh_flag,__zero_reg__
- 632 029c 00C0      		rjmp .L36
- 633               	.LFE8:
- 635               	.global	btn_state
- 636               	.global	btn_state
- 637               		.section .bss
- 640               	btn_state:
- 641 0000 0000 0000 		.skip 6,0
- 641      0000 
- 642               	.global	memory_state
- 643               	.global	memory_state
- 646               	memory_state:
- 647 0006 0000 0000 		.skip 6,0
- 647      0000 
- 648               	.global	iteration
- 649               	.global	iteration
- 652               	iteration:
- 653 000c 0000      		.skip 2,0
- 654               	.global	dimensions
- 655               	.global	dimensions
- 658               	dimensions:
- 659 000e 0000      		.skip 2,0
- 660               	.global	total_dist
- 661               	.global	total_dist
- 664               	total_dist:
- 665 0010 00        		.skip 1,0
- 666               	.global	separator_sign
- 667               		.data
- 670               	separator_sign:
- 671 0047 04        		.byte	4
- 672 0048 04        		.byte	4
- 673 0049 04        		.byte	4
- 674 004a 04        		.byte	4
- 675 004b 04        		.byte	4
- 676 004c 04        		.byte	4
- 677 004d 04        		.byte	4
- 678 004e 04        		.byte	4
- 679               	.global	refresh_flag
- 680               	.global	refresh_flag
- 681               		.section .bss
- 684               	refresh_flag:
- 685 0011 00        		.skip 1,0
- 686               	.global	j
- 687               	.global	j
- 690               	j:
- 691 0012 00        		.skip 1,0
- 692               	.global	current_state
- 693               	.global	current_state
- 696               	current_state:
- 697 0013 00        		.skip 1,0
- 810               	.Letext0:
+ 539 0252 1092 0000 		sts btn_state+5,__zero_reg__
+ 540               	.L25:
+ 541               	.LM100:
+ 542 0256 9899      		sbic 51-32,0
+ 543 0258 00C0      		rjmp .L27
+ 544               	.LM101:
+ 545 025a 1093 0000 		sts btn_state,r17
+ 546 025e 00C0      		rjmp .L28
+ 547               	.L27:
+ 548               	.LM102:
+ 549 0260 9999      		sbic 51-32,1
+ 550 0262 00C0      		rjmp .L29
+ 551               	.LM103:
+ 552 0264 1093 0000 		sts btn_state+1,r17
+ 553 0268 00C0      		rjmp .L28
+ 554               	.L29:
+ 555               	.LM104:
+ 556 026a 9A99      		sbic 51-32,2
+ 557 026c 00C0      		rjmp .L30
+ 558               	.LM105:
+ 559 026e 1092 0000 		sts btn_state+2,__zero_reg__
+ 560 0272 00C0      		rjmp .L28
+ 561               	.L30:
+ 562               	.LM106:
+ 563 0274 9B99      		sbic 51-32,3
+ 564 0276 00C0      		rjmp .L31
+ 565               	.LM107:
+ 566 0278 1092 0000 		sts btn_state+3,__zero_reg__
+ 567 027c 00C0      		rjmp .L28
+ 568               	.L31:
+ 569               	.LM108:
+ 570 027e 9C9B      		sbis 51-32,4
+ 571 0280 00C0      		rjmp .L32
+ 572               	.LVL2:
+ 573               	.LBB2:
+ 574               	.LM109:
+ 575 0282 1092 0000 		sts btn_state,__zero_reg__
+ 576               	.LVL3:
+ 577 0286 1092 0000 		sts btn_state+1,__zero_reg__
+ 578               	.LVL4:
+ 579 028a 1092 0000 		sts btn_state+2,__zero_reg__
+ 580               	.LVL5:
+ 581 028e 1092 0000 		sts btn_state+3,__zero_reg__
+ 582               	.LVL6:
+ 583               	.L32:
+ 584               	.LBE2:
+ 585               	.LM110:
+ 586 0292 1092 0000 		sts btn_state+4,__zero_reg__
+ 587               	.L28:
+ 588               	.LM111:
+ 589 0296 8091 0000 		lds r24,refresh_flag
+ 590 029a 602F      		mov r22,r16
+ 591 029c 00D0      		rcall __udivmodqi4
+ 592 029e 9923      		tst r25
+ 593 02a0 01F4      		brne .L33
+ 594               	.LM112:
+ 595 02a2 8091 0000 		lds r24,memory_state
+ 596               	.LM113:
+ 597 02a6 00D0      		rcall lcd_debug
+ 598               	.L33:
+ 599               	.LM114:
+ 600 02a8 8091 0000 		lds r24,refresh_flag
+ 601               	.LM115:
+ 602 02ac 8091 0000 		lds r24,refresh_flag
+ 603 02b0 8F3F      		cpi r24,lo8(-1)
+ 604 02b2 01F4      		brne .L39
+ 605               	.LM116:
+ 606 02b4 1092 0000 		sts refresh_flag,__zero_reg__
+ 607 02b8 00C0      		rjmp .L39
+ 608               	.LFE8:
+ 610               		.data
+ 611               	.LC4:
+ 612 001e 5345 4E53 		.string	"SENS"
+ 612      00
+ 613               	.LC5:
+ 614 0023 4300      		.string	"C"
+ 615               	.LC6:
+ 616 0025 4C00      		.string	"L"
+ 617               	.LC7:
+ 618 0027 2000      		.string	" "
+ 619               	.LC8:
+ 620 0029 4D4F 4445 		.string	"MODE"
+ 620      00
+ 621               	.LC9:
+ 622 002e 4954 00   		.string	"IT"
+ 623               	.LC10:
+ 624 0031 4C4E 00   		.string	"LN"
+ 625               	.LC11:
+ 626 0034 5350 4400 		.string	"SPD"
+ 627               	.LC12:
+ 628 0038 8000      		.string	"\200"
+ 629               		.text
+ 630               	.global	lcd_refresh
+ 632               	lcd_refresh:
+ 633               	.LFB11:
+ 634               	.LM117:
+ 635               	/* prologue: function */
+ 636               	/* frame size = 0 */
+ 637               	/* stack size = 0 */
+ 638               	.L__stack_usage = 0
+ 639               	.LM118:
+ 640 02ba 00D0      		rcall lcd_cls
+ 641               	.LM119:
+ 642 02bc 80E0      		ldi r24,lo8(0)
+ 643 02be 60E0      		ldi r22,lo8(0)
+ 644 02c0 00D0      		rcall lcd_locate
+ 645               	.LM120:
+ 646 02c2 80E0      		ldi r24,lo8(.LC4)
+ 647 02c4 90E0      		ldi r25,hi8(.LC4)
+ 648 02c6 00D0      		rcall lcd_str
+ 649               	.LM121:
+ 650 02c8 80E0      		ldi r24,lo8(0)
+ 651 02ca 64E0      		ldi r22,lo8(4)
+ 652 02cc 00D0      		rcall lcd_locate
+ 653               	.LM122:
+ 654 02ce 8091 0000 		lds r24,btn_state
+ 655 02d2 8130      		cpi r24,lo8(1)
+ 656 02d4 01F4      		brne .L41
+ 657               	.LM123:
+ 658 02d6 80E0      		ldi r24,lo8(.LC5)
+ 659 02d8 90E0      		ldi r25,hi8(.LC5)
+ 660 02da 00C0      		rjmp .L44
+ 661               	.L41:
+ 662               	.LM124:
+ 663 02dc 8091 0000 		lds r24,btn_state+1
+ 664 02e0 8130      		cpi r24,lo8(1)
+ 665 02e2 01F4      		brne .L43
+ 666               	.LM125:
+ 667 02e4 80E0      		ldi r24,lo8(.LC6)
+ 668 02e6 90E0      		ldi r25,hi8(.LC6)
+ 669 02e8 00C0      		rjmp .L44
+ 670               	.L43:
+ 671               	.LM126:
+ 672 02ea 80E0      		ldi r24,lo8(.LC7)
+ 673 02ec 90E0      		ldi r25,hi8(.LC7)
+ 674               	.L44:
+ 675 02ee 00D0      		rcall lcd_str
+ 676               	.LM127:
+ 677 02f0 80E0      		ldi r24,lo8(0)
+ 678 02f2 66E0      		ldi r22,lo8(6)
+ 679 02f4 00D0      		rcall lcd_locate
+ 680               	.LM128:
+ 681 02f6 80E0      		ldi r24,lo8(.LC8)
+ 682 02f8 90E0      		ldi r25,hi8(.LC8)
+ 683 02fa 00D0      		rcall lcd_str
+ 684               	.LM129:
+ 685 02fc 80E0      		ldi r24,lo8(0)
+ 686 02fe 6AE0      		ldi r22,lo8(10)
+ 687 0300 00D0      		rcall lcd_locate
+ 688               	.LM130:
+ 689 0302 8091 0000 		lds r24,memory_state+1
+ 690 0306 90E0      		ldi r25,lo8(0)
+ 691 0308 00D0      		rcall lcd_int
+ 692               	.LM131:
+ 693 030a 81E0      		ldi r24,lo8(1)
+ 694 030c 60E0      		ldi r22,lo8(0)
+ 695 030e 00D0      		rcall lcd_locate
+ 696               	.LM132:
+ 697 0310 80E0      		ldi r24,lo8(.LC9)
+ 698 0312 90E0      		ldi r25,hi8(.LC9)
+ 699 0314 00D0      		rcall lcd_str
+ 700               	.LM133:
+ 701 0316 81E0      		ldi r24,lo8(1)
+ 702 0318 62E0      		ldi r22,lo8(2)
+ 703 031a 00D0      		rcall lcd_locate
+ 704               	.LM134:
+ 705 031c 8091 0000 		lds r24,memory_state+3
+ 706 0320 90E0      		ldi r25,lo8(0)
+ 707 0322 00D0      		rcall lcd_int
+ 708               	.LM135:
+ 709 0324 81E0      		ldi r24,lo8(1)
+ 710 0326 66E0      		ldi r22,lo8(6)
+ 711 0328 00D0      		rcall lcd_locate
+ 712               	.LM136:
+ 713 032a 80E0      		ldi r24,lo8(.LC10)
+ 714 032c 90E0      		ldi r25,hi8(.LC10)
+ 715 032e 00D0      		rcall lcd_str
+ 716               	.LM137:
+ 717 0330 81E0      		ldi r24,lo8(1)
+ 718 0332 68E0      		ldi r22,lo8(8)
+ 719 0334 00D0      		rcall lcd_locate
+ 720               	.LM138:
+ 721 0336 8091 0000 		lds r24,memory_state+4
+ 722 033a 90E0      		ldi r25,lo8(0)
+ 723 033c 00D0      		rcall lcd_int
+ 724               	.LM139:
+ 725 033e 80E0      		ldi r24,lo8(0)
+ 726 0340 6DE0      		ldi r22,lo8(13)
+ 727 0342 00D0      		rcall lcd_locate
+ 728               	.LM140:
+ 729 0344 80E0      		ldi r24,lo8(.LC11)
+ 730 0346 90E0      		ldi r25,hi8(.LC11)
+ 731 0348 00D0      		rcall lcd_str
+ 732               	.LM141:
+ 733 034a 81E0      		ldi r24,lo8(1)
+ 734 034c 6DE0      		ldi r22,lo8(13)
+ 735 034e 00D0      		rcall lcd_locate
+ 736               	.LM142:
+ 737 0350 8091 0000 		lds r24,memory_state+5
+ 738 0354 90E0      		ldi r25,lo8(0)
+ 739 0356 00D0      		rcall lcd_int
+ 740               	.LM143:
+ 741 0358 80E0      		ldi r24,lo8(0)
+ 742 035a 65E0      		ldi r22,lo8(5)
+ 743 035c 00D0      		rcall lcd_locate
+ 744               	.LM144:
+ 745 035e 80E0      		ldi r24,lo8(.LC12)
+ 746 0360 90E0      		ldi r25,hi8(.LC12)
+ 747 0362 00D0      		rcall lcd_str
+ 748               	.LM145:
+ 749 0364 80E0      		ldi r24,lo8(0)
+ 750 0366 6BE0      		ldi r22,lo8(11)
+ 751 0368 00D0      		rcall lcd_locate
+ 752               	.LM146:
+ 753 036a 80E0      		ldi r24,lo8(.LC12)
+ 754 036c 90E0      		ldi r25,hi8(.LC12)
+ 755 036e 00D0      		rcall lcd_str
+ 756               	.LM147:
+ 757 0370 81E0      		ldi r24,lo8(1)
+ 758 0372 65E0      		ldi r22,lo8(5)
+ 759 0374 00D0      		rcall lcd_locate
+ 760               	.LM148:
+ 761 0376 80E0      		ldi r24,lo8(.LC12)
+ 762 0378 90E0      		ldi r25,hi8(.LC12)
+ 763 037a 00D0      		rcall lcd_str
+ 764               	.LM149:
+ 765 037c 81E0      		ldi r24,lo8(1)
+ 766 037e 6BE0      		ldi r22,lo8(11)
+ 767 0380 00D0      		rcall lcd_locate
+ 768               	.LM150:
+ 769 0382 80E0      		ldi r24,lo8(.LC12)
+ 770 0384 90E0      		ldi r25,hi8(.LC12)
+ 771 0386 00D0      		rcall lcd_str
+ 772               	.LM151:
+ 773 0388 80E0      		ldi r24,lo8(0)
+ 774 038a 6CE0      		ldi r22,lo8(12)
+ 775 038c 00D0      		rcall lcd_locate
+ 776               	.LM152:
+ 777 038e 80E0      		ldi r24,lo8(.LC7)
+ 778 0390 90E0      		ldi r25,hi8(.LC7)
+ 779 0392 00D0      		rcall lcd_str
+ 780               	.LM153:
+ 781 0394 81E0      		ldi r24,lo8(1)
+ 782 0396 6CE0      		ldi r22,lo8(12)
+ 783 0398 00D0      		rcall lcd_locate
+ 784               	.LM154:
+ 785 039a 80E0      		ldi r24,lo8(.LC7)
+ 786 039c 90E0      		ldi r25,hi8(.LC7)
+ 787 039e 00D0      		rcall lcd_str
+ 788               	/* epilogue start */
+ 789               	.LM155:
+ 790 03a0 0895      		ret
+ 791               	.LFE11:
+ 793               		.data
+ 794               	.LC13:
+ 795 003a 0D0A 2323 		.string	"\r\n#### Report ####"
+ 795      2323 2052 
+ 795      6570 6F72 
+ 795      7420 2323 
+ 795      2323 00
+ 796               		.text
+ 797               	.global	USART_send_report
+ 799               	USART_send_report:
+ 800               	.LFB12:
+ 801               	.LM156:
+ 802               	/* prologue: function */
+ 803               	/* frame size = 0 */
+ 804               	/* stack size = 0 */
+ 805               	.L__stack_usage = 0
+ 806               	.LM157:
+ 807 03a2 80E0      		ldi r24,lo8(.LC13)
+ 808 03a4 90E0      		ldi r25,hi8(.LC13)
+ 809 03a6 00D0      		rcall USART_string
+ 810               	/* epilogue start */
+ 811               	.LM158:
+ 812 03a8 0895      		ret
+ 813               	.LFE12:
+ 815               	.global	btn_state
+ 816               	.global	btn_state
+ 817               		.section .bss
+ 820               	btn_state:
+ 821 0000 0000 0000 		.skip 6,0
+ 821      0000 
+ 822               	.global	memory_state
+ 823               	.global	memory_state
+ 826               	memory_state:
+ 827 0006 0000 0000 		.skip 6,0
+ 827      0000 
+ 828               	.global	separator_sign
+ 829               		.data
+ 832               	separator_sign:
+ 833 004d 04        		.byte	4
+ 834 004e 04        		.byte	4
+ 835 004f 04        		.byte	4
+ 836 0050 04        		.byte	4
+ 837 0051 04        		.byte	4
+ 838 0052 04        		.byte	4
+ 839 0053 04        		.byte	4
+ 840 0054 04        		.byte	4
+ 841               	.global	refresh_flag
+ 842               	.global	refresh_flag
+ 843               		.section .bss
+ 846               	refresh_flag:
+ 847 000c 00        		.skip 1,0
+ 848               	.global	j
+ 849               	.global	j
+ 852               	j:
+ 853 000d 00        		.skip 1,0
+ 974               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 atmega_master.c
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:2      *ABS*:0000003f __SREG__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:3      *ABS*:0000003e __SP_H__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:4      *ABS*:0000003d __SP_L__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:5      *ABS*:00000034 __CCP__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:18     .text:00000000 Timer2_init
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:47     .text:00000018 sensors_init
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:69     .text:00000026 controls_init
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:91     .text:00000034 SPI_init
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:115    .text:00000044 SPI_SS_low
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:131    .text:00000048 SPI_SS_high
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:147    .text:0000004c SPI_transfer
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:171    .text:00000056 __vector_3
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:690    .bss:00000012 j
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:640    .bss:00000000 btn_state
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:646    .bss:00000006 memory_state
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:684    .bss:00000011 refresh_flag
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:262    .text:000000e4 lcd_welcome
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:314    .text:00000100 lcd_refresh
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:652    .bss:0000000c iteration
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:664    .bss:00000010 total_dist
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:483    .text:000001ec USART_send_report
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:501    .text:000001f4 main
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:670    .data:00000047 separator_sign
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:658    .bss:0000000e dimensions
-C:\Users\cadavre\AppData\Local\Temp\cc1W7lHK.s:696    .bss:00000013 current_state
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:2      *ABS*:0000003f __SREG__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:3      *ABS*:0000003e __SP_H__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:4      *ABS*:0000003d __SP_L__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:5      *ABS*:00000034 __CCP__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:18     .text:00000000 Timer2_init
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:47     .text:00000018 sensors_init
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:69     .text:00000026 controls_init
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:91     .text:00000034 SPI_init
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:115    .text:00000044 SPI_SS_low
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:131    .text:00000048 SPI_SS_high
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:147    .text:0000004c SPI_transfer
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:171    .text:00000056 __vector_3
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:852    .bss:0000000d j
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:820    .bss:00000000 btn_state
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:826    .bss:00000006 memory_state
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:846    .bss:0000000c refresh_flag
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:262    .text:000000e4 lcd_welcome
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:300    .text:00000100 lcd_debug
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:476    .text:00000210 main
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:832    .data:0000004d separator_sign
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:632    .text:000002ba lcd_refresh
+C:\Users\cadavre\AppData\Local\Temp\cc9iMoFQ.s:799    .text:000003a2 USART_send_report
 
 UNDEFINED SYMBOLS
 lcd_cls
 lcd_locate
 lcd_str
 lcd_int
-__udivmodqi4
-USART_string
 USART_init
 lcd_init
 lcd_defchar
+__udivmodqi4
+USART_string
 __do_copy_data
 __do_clear_bss
