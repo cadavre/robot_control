@@ -16,10 +16,10 @@
 #define MOTOR_PC				(1<<PC2)|(1<<PC3)|(1<<PC4)|(1<<PC5)
 
 // krokowe: cewki
-#define M0_A1					(1<<PD4)
-#define M0_B1					(1<<PD5)
-#define M0_A2					(1<<PD6)
-#define M0_B2					(1<<PD7)
+#define M0_AP					(1<<PD4)
+#define M0_BP					(1<<PD5)
+#define M0_AM					(1<<PD6)
+#define M0_BM					(1<<PD7)
 
 #define M1_AP					(1<<PC2)
 #define M1_BP					(1<<PC3)
@@ -27,28 +27,15 @@
 #define M1_BM					(1<<PC5)
 
 // krokowe: kroki
-#define M0_STEP1				PORTD |= M0_A1|M0_B1; PORTD &= ~(M0_A2|M0_B2)
-#define M0_STEP2				PORTD |= M0_B1; PORTD &= ~(M0_A1|M0_A2|M0_B2)
-#define M0_STEP3				PORTD |= M0_A2|M0_B1; PORTD &= ~(M0_A1|M0_B2)
-#define M0_STEP4				PORTD |= M0_A2; PORTD &= ~(M0_A1|M0_B1|M0_B2)
-#define M0_STEP5				PORTD |= M0_A2|M0_B2; PORTD &= ~(M0_A1|M0_B1)
-#define M0_STEP6				PORTD |= M0_B2; PORTD &= ~(M0_A1|M0_A2|M0_B1)
-#define M0_STEP7				PORTD |= M0_A1|M0_B2; PORTD &= ~(M0_A2|M0_B1)
-#define M0_STEP8				PORTD |= M0_A1; PORTD &= ~(M0_A2|M0_B1|M0_B2)
+#define M0_STEP1				PORTD |= M0_BP|M0_AM; PORTD &= ~(M0_AP|M0_BM)
+#define M0_STEP2				PORTD |= M0_AP|M0_BP; PORTD &= ~(M0_AM|M0_BM)
+#define M0_STEP3				PORTD |= M0_AP|M0_BM; PORTD &= ~(M0_AM|M0_BP)
+#define M0_STEP4				PORTD |= M0_AM|M0_BM; PORTD &= ~(M0_AP|M0_BP)
 
 #define M1_STEP1				PORTC |= M1_BP|M1_AM; PORTC &= ~(M1_AP|M1_BM)
 #define M1_STEP2				PORTC |= M1_AP|M1_BP; PORTC &= ~(M1_AM|M1_BM)
 #define M1_STEP3				PORTC |= M1_AP|M1_BM; PORTC &= ~(M1_AM|M1_BP)
 #define M1_STEP4				PORTC |= M1_AM|M1_BM; PORTC &= ~(M1_AP|M1_BP)
-
-/*#define M1_STEP1				PORTC |= M1_AP|M1_BM; PORTC &= ~(M1_AM|M1_BP)
-#define M1_STEP2				PORTC |= M1_AP; PORTC &= ~(M1_AM|M1_BP|M1_BM)
-#define M1_STEP3				PORTC |= M1_AP|M1_AM; PORTC &= ~(M1_BP|M1_BM)
-#define M1_STEP4				PORTC |= M1_AM; PORTC &= ~(M1_AP|M1_BP|M1_BM)
-#define M1_STEP5				PORTC |= M1_AM|M1_BP; PORTC &= ~(M1_AP|M1_BM)
-#define M1_STEP6				PORTC |= M1_BP; PORTC &= ~(M1_AP|M1_AM|M1_BM)
-#define M1_STEP7				PORTC |= M1_BP|M1_BM; PORTC &= ~(M1_AP|M1_AM)
-#define M1_STEP8				PORTC |= M1_BM; PORTC &= ~(M1_AP|M1_AM|M1_BP)*/
 
 // krokowce - specyfikacja
 #define M_ROTATE_STEPS			48
@@ -75,6 +62,7 @@
 // flaga reakcji na wciœniêcie
 #define BTN_GET_ON	4
 #define SENS_IDLE	300000		// czas zw³oki do nastêpnego pomiaru z sensorów (1-4000000)
+#define CHNG_IDLE	30
 
 // definicje stanów flag
 #define STATE_IDLE				0x00
@@ -86,8 +74,7 @@
 #define MODE_BACK_TURNING		0x03	// obrót
 
 // poruszanie siê odkurzacza
-#define VACU_LENGTH						40		// d³. odkurzacza [cm]									TODO
-#define VACU_DIST_PER_ROTATE			40		// dyst. na jeden pe³ny obrót [cm]						TODO
-#define VACU_STEPS_TO_TURN90			60
+#define VACU_STEPS_TO_REVERSE			20		// ile kroków siê cofn¹æ
+#define VACU_STEPS_TO_TURN90			62		// ile kroków jednego silnika by obróciæ o 90deg
 
 #endif /* ATMEGA_SLAVE_CONF_H_ */

@@ -31,6 +31,7 @@ uint8_t total_dist = 0;					// m, max 255m
 
 uint32_t i = 0;
 volatile uint8_t j = 0;
+volatile uint8_t k = CHNG_IDLE;
 volatile uint8_t btn_get_flag = 0;
 volatile uint8_t stepper_flag = 0;
 
@@ -53,9 +54,7 @@ void turn45(void);
  */
 void motor_ports_init(void) {
 	DDRD |= MOTOR_PD;
-	PORTD &= ~(MOTOR_PD);
 	DDRC |= MOTOR_PC;
-	PORTD &= ~(MOTOR_PC);
 	// set ports to default STEP1
 	M0_STEP1;
 	M1_STEP1;
@@ -116,26 +115,36 @@ ISR(TIMER0_OVF_vect) {
 	if (stepper_flag == 0) {
 		if (current_mode == MODE_PROGRESSING) {
 			// both same speed forward
-			motor_move(0,0);
-			motor_move(1,0);
+			motor_move(0,1);
+			motor_move(1,1);
 		} else if (current_mode == MODE_REVERSING) {
 			// both same speed reverse
-			if (motor_pos[0] > 0) {
-				motor_move(0,1);
-				motor_move(1,1);
-				motor_pos[0]--;
-			}
-			if (motor_pos[0] == 0) {
-				current_mode = next_mode;
+			if (k < 1) {
+				if (motor_pos[0] > 0) {
+					motor_move(0,0);
+					motor_move(1,0);
+					motor_pos[0]--;
+				}
+				if (motor_pos[0] == 0) {
+					k = CHNG_IDLE/2;
+					current_mode = next_mode;
+				}
+			} else {
+				k--;
 			}
 		} else if (current_mode == MODE_BACK_TURNING) {
 			// turning 90deg to back
-			if (motor_pos[1] > 0) {
-				motor_move(1,1);
-				motor_pos[1]--;
-			}
-			if (motor_pos[1] == 0) {
-				current_mode = MODE_PROGRESSING;
+			if (k < 1) {
+				if (motor_pos[1] > 0) {
+					motor_move(1,1);
+					motor_pos[1]--;
+				}
+				if (motor_pos[1] == 0) {
+					k = CHNG_IDLE;
+					current_mode = MODE_PROGRESSING;
+				}
+			} else {
+				k--;
 			}
 		}
 	}
@@ -249,6 +258,7 @@ void reset(void) {
 	max_dimension = 0;
 	total_dist = 0;
 
+	k = CHNG_IDLE;
 	current_state = STATE_IDLE;
 	current_mode = MODE_STANDING;
 }
@@ -266,7 +276,7 @@ void run(void) {
  */
 void reverse(void) {
 	course = 1 + iteration/8;
-	motor_pos[0] = M_ROTATE_STEPS * (course * VACU_LENGTH/VACU_DIST_PER_ROTATE);		// countdown for reverse steps
+	motor_pos[0] = VACU_STEPS_TO_REVERSE;
 	current_mode = MODE_REVERSING;
 }
 

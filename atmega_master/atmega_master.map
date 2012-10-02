@@ -428,18 +428,18 @@ LOAD c:/program files (x86)/atmel/avr studio 5.0/avr toolchain/bin/../lib/gcc/av
  .debug_pubnames
                 0x000001ef       0xdb usart/usart.o
 
-.debug_info     0x00000000      0xa6b
+.debug_info     0x00000000      0xa6c
  *(.debug_info)
- .debug_info    0x00000000      0x282 atmega_master.o
- .debug_info    0x00000282      0x537 lcd/lcd44780.o
- .debug_info    0x000007b9      0x2b2 usart/usart.o
+ .debug_info    0x00000000      0x283 atmega_master.o
+ .debug_info    0x00000283      0x537 lcd/lcd44780.o
+ .debug_info    0x000007ba      0x2b2 usart/usart.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x471
+.debug_abbrev   0x00000000      0x486
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xe9 atmega_master.o
- .debug_abbrev  0x000000e9      0x270 lcd/lcd44780.o
- .debug_abbrev  0x00000359      0x118 usart/usart.o
+ .debug_abbrev  0x00000000       0xfe atmega_master.o
+ .debug_abbrev  0x000000fe      0x270 lcd/lcd44780.o
+ .debug_abbrev  0x0000036e      0x118 usart/usart.o
 
 .debug_line     0x00000000      0xc9d
  *(.debug_line)

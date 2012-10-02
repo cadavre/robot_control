@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   6 .debug_pubnames 000002ca  00000000  00000000  00001361  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00000a6b  00000000  00000000  0000162b  2**0
+  7 .debug_info   00000a6c  00000000  00000000  0000162b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00000471  00000000  00000000  00002096  2**0
+  8 .debug_abbrev 00000486  00000000  00000000  00002097  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00000c9d  00000000  00000000  00002507  2**0
+  9 .debug_line   00000c9d  00000000  00000000  0000251d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  00000260  00000000  00000000  000031a4  2**2
+ 10 .debug_frame  00000260  00000000  00000000  000031bc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000379  00000000  00000000  00003404  2**0
+ 11 .debug_str    00000379  00000000  00000000  0000341c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    0000035d  00000000  00000000  0000377d  2**0
+ 12 .debug_loc    0000035d  00000000  00000000  00003795  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_pubtypes 00000081  00000000  00000000  00003ada  2**0
+ 13 .debug_pubtypes 00000081  00000000  00000000  00003af2  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -733,9 +733,11 @@ int main(void)
 				lcd_refresh();
  3b4:	5c df       	rcall	.-328    	; 0x26e <lcd_refresh>
  3b6:	01 c0       	rjmp	.+2      	; 0x3ba <main+0xa0>
+				//lcd_debug();
 			} else {
 				lcd_welcome();
  3b8:	c4 de       	rcall	.-632    	; 0x142 <lcd_welcome>
+				//lcd_debug();
 			}
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {

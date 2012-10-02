@@ -147,8 +147,10 @@ int main(void)
 		if ( (refresh_flag % LCD_REFRESH_TICK) == 0 ) {
 			if ( memory_state[0] == STATE_RUNNING ) {
 				lcd_refresh();
+				//lcd_debug();
 			} else {
 				lcd_welcome();
+				//lcd_debug();
 			}
 		}
 		if ( (refresh_flag % USART_REFRESH_TICK) == 0 ) {
