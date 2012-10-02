@@ -45,7 +45,7 @@ void motor_make_step(uint8_t motor, uint8_t dir);
 void motor_move(uint8_t motor, uint8_t dir);
 void reset(void);
 void run(void);
-void reverse(void);
+void reverse(uint8_t steps);
 void turn90(void);
 void turn45(void);
 
@@ -176,25 +176,22 @@ int main(void)
 		/*
 		 * Handle signals from sensors
 		 */
-		if (current_state == STATE_RUNNING) {
-			if (btn_state[0] == BTN_ON || btn_state[1] == BTN_ON) {
-				if (i == 0) {
-					reverse();
-					if (btn_state[0] == BTN_ON) {
-						// sensed center
-						turn90();
-					} else if (btn_state[1] == BTN_ON) {
-						// sensed left
-						turn45();
-					}
-					i++;
-				} else if (i == SENS_IDLE) {
-					i = 0;
-				} else {
-					i++;
+		if (current_state == STATE_RUNNING && current_mode == MODE_PROGRESSING) {
+			if ((btn_state[0] == BTN_ON || btn_state[1] == BTN_ON) && i == 0) {
+				if (btn_state[0] == BTN_ON) {
+					// sensed center
+					reverse(VACU_STEPS_TO_REVERSE90);
+					turn90();
+				} else if (btn_state[1] == BTN_ON) {
+					// sensed left
+					reverse(VACU_STEPS_TO_REVERSE45);
+					turn45();
 				}
-			} else {
+				i++;
+			} else if (i == SENS_IDLE) {
 				i = 0;
+			} else if (i != 0) {
+				i++;
 			}
 		}
 
@@ -274,9 +271,9 @@ void run(void) {
 /*
  * Go straight back by multiplier of vaccum course
  */
-void reverse(void) {
+void reverse(uint8_t steps) {
 	course = 1 + iteration/8;
-	motor_pos[0] = VACU_STEPS_TO_REVERSE;
+	motor_pos[0] = steps;
 	current_mode = MODE_REVERSING;
 }
 

@@ -62,7 +62,7 @@
 // flaga reakcji na wciœniêcie
 #define BTN_GET_ON	4
 #define SENS_IDLE	300000		// czas zw³oki do nastêpnego pomiaru z sensorów (1-4000000)
-#define CHNG_IDLE	30
+#define CHNG_IDLE	20
 
 // definicje stanów flag
 #define STATE_IDLE				0x00
@@ -74,7 +74,8 @@
 #define MODE_BACK_TURNING		0x03	// obrót
 
 // poruszanie siê odkurzacza
-#define VACU_STEPS_TO_REVERSE			20		// ile kroków siê cofn¹æ
+#define VACU_STEPS_TO_REVERSE90			25		// ile kroków siê cofn¹æ
+#define VACU_STEPS_TO_REVERSE45			15		// ile kroków siê cofn¹æ
 #define VACU_STEPS_TO_TURN90			62		// ile kroków jednego silnika by obróciæ o 90deg
 
 #endif /* ATMEGA_SLAVE_CONF_H_ */
